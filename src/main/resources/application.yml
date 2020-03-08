@@ -3,5 +3,35 @@ spring:
     url: jdbc:mysql://localhost:3306/movie_theater?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
     password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    test-while-idle: true
+    validation-query: SELECT 1
+  redis:
+    host: 127.0.0.1
+    #redis密码，没有密码的可以用～表示
+    password: dw@@2020
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 10
+        max-wait: 100000
+
+  thymeleaf:
+    cache: false
+    mode: HTML5
+    check-template: true
+    servlet:
+      content-type: text/html
+    encoding: utf-8
+    suffix: .html
+
+server:
+  servlet:
+    context-path: /
+  port: 8888
+
+mybatis:
+  type-aliases-package: com.ws.mapper
+  mapper-locations: classpath*:mapper/*.xml
+  configLocation: classpath:mybatis-config.xml
