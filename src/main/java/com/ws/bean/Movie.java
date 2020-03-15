@@ -1,6 +1,7 @@
 package com.ws.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class Movie {
     private String movieId;
@@ -21,9 +22,23 @@ public class Movie {
 
     private Integer status;
 
+    private Integer regionId;
+
+    private Integer collectCount;
+
     private Date createTime;
 
     private Date updateTime;
+
+    private List<Actor> actorList;
+
+    private List<Comment> commentList;
+    
+    private List<Type> typeList;
+    
+    private List<DirW> dirWList;
+    
+    private Region region;
 
     public String getMovieId() {
         return movieId;
@@ -97,6 +112,22 @@ public class Movie {
         this.status = status;
     }
 
+    public Integer getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
+    }
+
+    public Integer getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(Integer collectCount) {
+        this.collectCount = collectCount;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -111,5 +142,64 @@ public class Movie {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<Actor> getActorList() {
+        return actorList;
+    }
+
+    public void setActorList(List<Actor> actorList) {
+        this.actorList = actorList;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
+
+    public List<Type> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<Type> typeList) {
+        this.typeList = typeList;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public List<DirW> getDirWList() {
+        return dirWList;
+    }
+
+    public void setDirWList(List<DirW> dirWList) {
+        this.dirWList = dirWList;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieId='" + movieId + '\'' +
+                ", name='" + name + '\'' +
+                ", rate=" + rate +
+                ", imdbId='" + imdbId + '\'' +
+                ", alias='" + alias + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", movieInfo='" + movieInfo + '\'' +
+                ", status=" + status +
+                ", regionId=" + regionId +
+                ", collectCount=" + collectCount +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

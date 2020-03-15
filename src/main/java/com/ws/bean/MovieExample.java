@@ -1,9 +1,11 @@
 package com.ws.bean;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@Component
 public class MovieExample {
     protected String orderByClause;
 
@@ -702,6 +704,126 @@ public class MovieExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdIsNull() {
+            addCriterion("region_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdIsNotNull() {
+            addCriterion("region_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdEqualTo(Integer value) {
+            addCriterion("region_id =", value, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdNotEqualTo(Integer value) {
+            addCriterion("region_id <>", value, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdGreaterThan(Integer value) {
+            addCriterion("region_id >", value, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("region_id >=", value, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdLessThan(Integer value) {
+            addCriterion("region_id <", value, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdLessThanOrEqualTo(Integer value) {
+            addCriterion("region_id <=", value, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdIn(List<Integer> values) {
+            addCriterion("region_id in", values, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdNotIn(List<Integer> values) {
+            addCriterion("region_id not in", values, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdBetween(Integer value1, Integer value2) {
+            addCriterion("region_id between", value1, value2, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("region_id not between", value1, value2, "regionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountIsNull() {
+            addCriterion("collect_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountIsNotNull() {
+            addCriterion("collect_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountEqualTo(Integer value) {
+            addCriterion("collect_count =", value, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountNotEqualTo(Integer value) {
+            addCriterion("collect_count <>", value, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountGreaterThan(Integer value) {
+            addCriterion("collect_count >", value, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("collect_count >=", value, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountLessThan(Integer value) {
+            addCriterion("collect_count <", value, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountLessThanOrEqualTo(Integer value) {
+            addCriterion("collect_count <=", value, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountIn(List<Integer> values) {
+            addCriterion("collect_count in", values, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountNotIn(List<Integer> values) {
+            addCriterion("collect_count not in", values, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountBetween(Integer value1, Integer value2) {
+            addCriterion("collect_count between", value1, value2, "collectCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("collect_count not between", value1, value2, "collectCount");
             return (Criteria) this;
         }
 

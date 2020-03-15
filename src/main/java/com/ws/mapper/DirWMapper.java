@@ -27,4 +27,6 @@ public interface DirWMapper {
     int updateByPrimaryKeySelective(DirW record);
 
     int updateByPrimaryKey(DirW record);
+
+    List<DirW> getDirWsByMovieId(String movieId);
 }

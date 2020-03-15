@@ -193,4 +193,9 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where type_id = #{typeId,jdbcType=INTEGER}
   </update>
+  <select id="getTypesByMovieId" resultMap="BaseResultMap">
+    select * from type where type_id in (
+        select type_id from movie_type where movie_id = #{movieId}
+    )
+  </select>
 </mapper>

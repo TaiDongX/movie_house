@@ -255,4 +255,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where comment_id = #{commentId,jdbcType=INTEGER}
   </update>
+  <select id="getCommentsByMovieId" resultMap="BaseResultMap">
+    select * from comment where movie_id = #{movieId}
+  </select>
 </mapper>

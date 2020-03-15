@@ -335,4 +335,9 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where d_id = #{dId,jdbcType=VARCHAR}
   </update>
+  <select id="getDirWsByMovieId" resultMap="BaseResultMap">
+    select * from dir_w where d_id in(
+        select dirw_id from movie_dirw where movie_id = #{movieId}
+      )
+  </select>
 </mapper>

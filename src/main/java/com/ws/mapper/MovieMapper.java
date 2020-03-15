@@ -3,8 +3,6 @@ package com.ws.mapper;
 import com.ws.bean.Movie;
 import com.ws.bean.MovieExample;
 import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 public interface MovieMapper {
@@ -29,4 +27,6 @@ public interface MovieMapper {
     int updateByPrimaryKeySelective(Movie record);
 
     int updateByPrimaryKey(Movie record);
+
+    List<Movie> getMostReviewedMovies(int regionId);
 }

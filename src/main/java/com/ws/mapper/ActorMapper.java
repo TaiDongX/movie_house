@@ -27,4 +27,8 @@ public interface ActorMapper {
     int updateByPrimaryKeySelective(Actor record);
 
     int updateByPrimaryKey(Actor record);
+
+    List<Actor> getActorsFamous();
+
+    List<Actor> getActorsByMovieId(String movieId);
 }
