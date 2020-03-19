@@ -23,14 +23,87 @@
 	<meta name="format-detection" content="telephone-no">
 
 	<!-- CSS files -->
-	<link rel="stylesheet" href="css/plugins.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="/static/css/plugins.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+	<script src="/static/js/jquery.js"></script>
 
+	<script type="text/javascript">
+
+		$(function () {
+			getCeleByPage(1);
+
+			$("#celeSize").change(function () {
+				getCeleByPage(1);
+			});
+
+			$("#CeleGridPage a").click(function () {
+				var s = $(this).text();
+
+				if(s !== '>' && s !== '<' && s!=='确定'){
+					getCeleByPage(s);
+				}
+			})
+
+
+		});
+
+		function getCeleByPage(page) {
+			var vo = {
+				"name": $("#celeName").val(),
+				"sex": $("#sex").val(),
+				"minBir": $("#minBir").val(),
+				"maxBir": $("#maxBir").val(),
+				"page": page,
+				"size": $("#celeSize").val()
+			};
+
+			$.ajax({
+				type: "POST",
+				url: "/cele/getCeleByPage",
+				data: JSON.stringify(vo),
+				dataType: "json",
+				contentType: "application/json",
+				success: function (pageInfo) {
+					$("#totalCeles").text(pageInfo.total);
+					var s = '';
+					for (var i = 0; i < pageInfo.list.length; i++) {
+						var actor = pageInfo.list[i];
+						s += '<div class="ceb-item">' +
+								'<a href="/cele/getCeleById?id=' + actor.actorId + '">' +
+								'<img src="/static/img/front//uploads/ceb4.jpg" alt=""></a>' +
+								'<div class="ceb-infor">' +
+								'<h2><a href="celebritylist.html">' + actor.name + '</a></h2>' +
+								'<span>' + actor.occupation + '</span></div></div>';
+					}
+					$("#celesItem").html(s);
+					$("#pageNum").val(pageInfo.pages);
+					PagingManage(pageInfo.pages, pageInfo.pageNum);
+				}
+			});
+
+		}
+		function goto() {
+			var s = $("#goto").val();
+			var re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
+
+			if (!re.test(s)) {
+				alert("页码不存在");
+				return;
+			}
+
+			if(s > $("#pageNum").val() || s <= 0){
+				alert("页码不存在");
+				return;
+			}
+			getCeleByPage(s);
+		}
+
+	</script>
 </head>
 <body>
 <!--preloading-->
 <div id="preloader">
-    <img class="logo" src="images/logo1.png" alt="" width="119" height="58">
+    <img class="logo" src="/static/img/front//logo1.png" alt="" width="119" height="58">
     <div id="status">
         <span></span>
         <span></span>
@@ -131,7 +204,7 @@
 							<span></span>
 						</div>
 				    </div>
-				    <a href="index.html"><img class="logo" src="images/logo1.png" alt="" width="119" height="58"></a>
+				    <a href="index.html"><img class="logo" src="/static/img/front//logo1.png" alt="" width="119" height="58"></a>
 			    </div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse flex-parent" id="bs-example-navbar-collapse-1">
@@ -174,7 +247,7 @@
 								<li><a href="celebritygrid01.html">celebrity grid 01</a></li>
 								<li><a href="celebritygrid02.html">celebrity grid 02 </a></li>
 								<li><a href="celebritylist.html">celebrity list</a></li>
-								<li class="it-last"><a href="celebritysingle.html">celebrity single</a></li>
+								<li class="it-last"><a href="celebritySingle.html">celebrity single</a></li>
 							</ul>
 						</li>
 						<li class="dropdown first">
@@ -251,179 +324,118 @@
 		<div class="row ipad-width2">
 			<div class="col-md-9 col-sm-12 col-xs-12">
 				<div class="topbar-filter">
-					<p>Found <span>1,608 celebrities</span> in total</p>
-					<label>Sort by:</label>
-					<select>
-						<option value="popularity">Popularity Descending</option>
-						<option value="popularity">Popularity Ascending</option>
-						<option value="rating">Rating Descending</option>
-						<option value="rating">Rating Ascending</option>
-						<option value="date">Release date Descending</option>
-						<option value="date">Release date Ascending</option>
-					</select>
+					<p>总共找到： <span id="totalCeles">1,608 </span> 位</p>
 					<a href="celebritylist.html" class="list"><i class="ion-ios-list-outline "></i></a>
 					<a  href="celebritygrid01.html" class="grid"><i class="ion-grid active"></i></a>
 				</div>
-				<div class="celebrity-items">
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb1.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Tom Hardy</a></h2>
-							<span>actor, usa</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritylist.html"><img src="images/uploads/ceb2.jpg" alt=""></a>						
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Leonardo DiCaprio</a></h2>
-							<span>actor, mexico</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb3.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Emma Stone</a></h2>
-							<span>Actress, usa</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"> <img src="images/uploads/ceb4.jpg" alt=""></a>
-						
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Olga Kurylenko</a></h2>
-							<span>Actress, sweden</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb5.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Micheal Bay</a></h2>
-							<span>Director, france</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb6.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Martin Scorsese</a></h2>
-							<span>Director, italy</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb7.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">TJohnson Staham</a></h2>
-							<span>actor, uk</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb8.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Haley Bennett</a></h2>
-							<span>actress, france</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb9.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Teresa Palmer</a></h2>
-							<span>actress, uk</span>
-						</div>
-					</div>
+				<div class="celebrity-items" id="celesItem">
+
 				</div>
 				<div class="topbar-filter">
-					<label>Reviews per page:</label>
-					<select>
-						<option value="range">9 Reviews</option>
-						<option value="saab">10 Reviews</option>
+					<label>每页</label>
+					<select id="celeSize">
+						<option value="6">6</option>
+						<option value="12">12</option>
 					</select>
-					
-					<div class="pagination2">
-						<span>Page 1 of 6:</span>
-						<a class="active" href="#">1</a>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						<a href="#">4</a>
-						<a href="#">5</a>
-						<a href="#">6</a>
-						<a href="#"><i class="ion-arrow-right-b"></i></a>
+					<input type="hidden" id="pageNum">
+
+					<div class="pagination2" id="CeleGridPage">
+
+						<a href="javaScript:void(0)" id="mPrePage">&lt;</a>
+						<a href="javaScript:void(0)" id="p1">1</a>
+						<span id="mPrePoint">...</span>
+						<a href="javaScript:void(0)" id="p2">2</a>
+						<a href="javaScript:void(0)" id="p3">3</a>
+						<a href="javaScript:void(0)" id="p4">4</a>
+						<a href="javaScript:void(0)" id="p5">5</a>
+						<a href="javaScript:void(0)" id="p6">6</a>
+						<span id="mSufPoint">...</span>
+						<a href="javaScript:void(0)" id="p7">79</a>
+						<a href="javaScript:void(0)" id="mSufPage">&gt;</a>
+						<input id="goto" placeholder="&nbsp;&nbsp;跳转到">
+						<a href="javaScript:void(0)" onclick="goto()">确定</a>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-3 col-xs-12 col-sm-12">
 				<div class="sidebar">
 						<div class="searh-form">
-						<h4 class="sb-title">Search celebrity</h4>
+						<h4 class="sb-title">查找演员</h4>
 						<form class="form-style-1 celebrity-form" action="#">
 							<div class="row">
 								<div class="col-md-12 form-it">
-									<label>Celebrity name</label>
-									<input type="text" placeholder="Enter keywords">
+									<label for="celeName">姓名:</label>
+									<input type="text" id="celeName" placeholder="输入关键字">
 								</div>
 								<div class="col-md-12 form-it">
-									<label>Celebrity Letter</label>
-									<select>
-									  <option value="range">A</option>
-									  <option value="saab">B</option>
+									<label>性别</label>
+									<select id="sex">
+										<option value="">-选择性别-</option>
+									  <option value="男">男</option>
+									  <option value="女">女</option>
 									</select>
 								</div>
 								<div class="col-md-12 form-it">
-									<label>Category</label>
-									<select>
-									  <option value="range">Actress</option>
-									  <option value="saab">Others</option>
-									</select>
-								</div>
-								<div class="col-md-12 form-it">
-									<label>Year of birth</label>
+									<label>出生日期：</label>
 									<div class="row">
 										<div class="col-md-6">
-											<select>
-											  <option value="range">1970</option>
-											  <option value="number">Other</option>
+											<select id="minBir">
+											  <option value="1500">-最早-</option>
+												<option value="1800">1800</option>
+												<option value="1840">1840</option>
+												<option value="1880">1880</option>
+												<option value="1920">1920</option>
+												<option value="1960">1960</option>
+												<option value="2000">2000</option>
 											</select>
 										</div>
 										<div class="col-md-6">
-											<select>
-											  <option value="range">1990</option>
-											  <option value="number">others</option>
+											<select id="maxBir">
+											  <option value="2021">-最晚-</option>
+												<option value="1840">1840</option>
+												<option value="1880">1880</option>
+												<option value="1920">1920</option>
+												<option value="1960">1960</option>
+												<option value="2000">2000</option>
+												<option value="2020">2020</option>
 											</select>
 										</div>
 									</div>
 								</div>
 								<div class="col-md-12 ">
-									<input class="submit" type="submit" value="submit">
+									<input class="submit" type="button" value="提交" onclick="getCeleByPage(1)">
 								</div>
 							</div>
 						</form>
 					</div>
 					<div class="ads">
-						<img src="images/uploads/ads1.png" alt="">
+						<img src="/static/img/front//uploads/ads1.png" alt="">
 					</div>
 					<div class="celebrities">
 						<h4 class="sb-title">featured celebrity</h4>
 						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava1.jpg" alt=""></a>
+							<a href="#"><img src="/static/img/front//uploads/ava1.jpg" alt=""></a>
 							<div class="celeb-author">
 								<h6><a href="#">Samuel N. Jack</a></h6>
 								<span>Actor</span>
 							</div>
 						</div>
 						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava2.jpg" alt=""></a>
+							<a href="#"><img src="/static/img/front//uploads/ava2.jpg" alt=""></a>
 							<div class="celeb-author">
 								<h6><a href="#">Benjamin Carroll</a></h6>
 								<span>Actor</span>
 							</div>
 						</div>
 						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava3.jpg" alt=""></a>
+							<a href="#"><img src="/static/img/front//uploads/ava3.jpg" alt=""></a>
 							<div class="celeb-author">
 								<h6><a href="#">Beverly Griffin</a></h6>
 								<span>Actor</span>
 							</div>
 						</div>
 						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava4.jpg" alt=""></a>
+							<a href="#"><img src="/static/img/front//uploads/ava4.jpg" alt=""></a>
 							<div class="celeb-author">
 								<h6><a href="#">Justin Weaver</a></h6>
 								<span>Actor</span>
@@ -441,7 +453,7 @@
 	<div class="container">
 		<div class="flex-parent-ft">
 			<div class="flex-child-ft item1">
-				 <a href="index.html"><img class="logo" src="images/logo1.png" alt=""></a>
+				 <a href="index.html"><img class="logo" src="/static/img/front//logo1.png" alt=""></a>
 				 <p>5th Avenue st, manhattan<br>
 				New York, NY 10001</p>
 				<p>Call us: <a href="#">(+01) 202 342 6789</a></p>
@@ -495,9 +507,8 @@
 </footer>
 <!-- end of footer section-->
 
-<script src="js/jquery.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/plugins2.js"></script>
-<script src="js/custom.js"></script>
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/plugins2.js"></script>
+<script src="/static/js/custom.js"></script>
 </body>
 </html>

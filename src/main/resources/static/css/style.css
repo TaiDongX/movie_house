@@ -4248,7 +4248,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 30px;
 }
 @media (max-width: 767px) {
@@ -4519,7 +4519,7 @@ ul {
   display: -ms-flexbox;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 30px;
   border-top: 1px solid #405266;
   border-bottom: 1px solid #405266;
@@ -4552,7 +4552,7 @@ ul {
   text-transform: none;
 }
 .topbar-filter select {
-  width: 215px;
+  width: 100px;
   -webkit-appearance: none;
   -moz-appearance: none;
   /* Firefox */
@@ -4602,7 +4602,7 @@ ul {
   color: #dcf836;
 }
 .topbar-filter .pagination2 {
-  padding-left: 100px;
+  padding-left: 0px;
 }
 @media (max-width: 767px) {
   .topbar-filter .pagination2 {
@@ -6405,7 +6405,8 @@ ul {
   margin-bottom: 10px;
 }
 .form-style-1 input,
-.form-style-1 select {
+.form-style-1 select,
+#goto{
   font-family: 'Nunito', sans-serif;
   font-size: 12px;
   color: #abb7c4;
@@ -8284,3 +8285,20 @@ footer.full-width-ft .ft-copyright {
   font-family: 'Dosis', sans-serif;
   font-weight: 700;
 }
+#relatedMovies{
+  overflow:hidden;
+  text-overflow:ellipsis; /* 加省略号 */
+  position: relative;
+  left: -50px;
+}
+
+
+#goto{
+  color: white;
+  width: 50px;
+  height: 20px;
+}
+#goto::-webkit-input-placeholder {
+  color: darkolivegreen;
+}
+

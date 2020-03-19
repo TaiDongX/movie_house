@@ -345,6 +345,23 @@
     <select id="getActorsByMovieId" resultMap="BaseResultMap">
         select * from actor where actor_id in (
             select actor_id from movie_actor where movie_id = #{movieId}
-        )
+        ) limit 5
+    </select>
+    <select id="getActorsByPage" resultMap="BaseResultMap">
+        select * from actor
+        <where>
+            <if test="vo.name != null and vo.name != ''">
+                and LOCATE(#{vo.name},`name`) > 0
+            </if>
+            <if test="vo.sex != null and vo.sex != ''">
+                and sex = #{vo.sex}
+            </if>
+            <if test="vo.minBir != null">
+                AND birthday &gt;= #{vo.minBir,jdbcType=DATE}
+            </if>
+            <if test="vo.maxBir != null">
+                AND birthday &lt;= #{vo.maxBir,jdbcType=DATE}
+            </if>
+        </where>
     </select>
 </mapper>

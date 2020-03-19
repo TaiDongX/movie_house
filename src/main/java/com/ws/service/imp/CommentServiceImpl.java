@@ -1,6 +1,7 @@
 package com.ws.service.imp;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ws.bean.Comment;
 import com.ws.mapper.CommentMapper;
 import com.ws.service.CommentService;
@@ -22,9 +23,9 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public List<Comment> getCommentsByMovieId(String movieId, Integer size, Integer page, String orderBy) {
+    public PageInfo<Comment> getCommentsByMovieId(String movieId, Integer size, Integer page, String orderBy) {
         PageHelper.startPage(page, size);
         PageHelper.orderBy(orderBy);
-        return commentMapper.getCommentsByMovieId(movieId);
+        return new PageInfo<>(commentMapper.getCommentsByMovieId(movieId));
     }
 }

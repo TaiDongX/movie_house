@@ -340,4 +340,7 @@
         select dirw_id from movie_dirw where movie_id = #{movieId}
       )
   </select>
+  <select id="getDirWStatus" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select status from movie_dirw where id = #{id};
+  </select>
 </mapper>

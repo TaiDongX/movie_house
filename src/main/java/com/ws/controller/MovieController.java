@@ -2,21 +2,26 @@ package com.ws.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ws.VO.IndexInfoVO;
+import com.ws.VO.QueryMoviesVO;
 import com.ws.bean.Actor;
 import com.ws.bean.Movie;
 import com.ws.mapper.MovieMapper;
 import com.ws.service.ActorService;
+import com.ws.service.DirWService;
 import com.ws.service.MovieService;
+import jdk.nashorn.internal.ir.LiteralNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author 王朔
@@ -34,23 +39,18 @@ public class MovieController {
     @Autowired
     private ActorService actorService;
 
+    @Autowired
+    private DirWService dirWService;
+
+
 
     /**
-     * 获取最受欢迎的电影：收藏数最多
-     * @return
-     */
-    @RequestMapping("/getMostPopularMovies")
-    public List<Movie> getMostPopularMovies(){
-        return null;
-    }
-
-    /**
-     * 分页查询
+     * 电影分页查询
      * @return
      */
     @RequestMapping("/getMoviesByPage")
-    public List<Movie> getMoviesByPage(){
-        return null;
+    public PageInfo<Movie> getMoviesByPage(@RequestBody QueryMoviesVO vo){
+        return movieService.getMoviesByPage(vo);
     }
 
     /**
@@ -84,6 +84,11 @@ public class MovieController {
         return m;
     }
 
+    /**
+     * 根据电影id获取电影
+     * @param movieId
+     * @return
+     */
     @RequestMapping("/getMovieById")
     public ModelAndView getMovieById(@RequestParam("movieId")String movieId){
         ModelAndView m = new ModelAndView();
@@ -92,7 +97,49 @@ public class MovieController {
         return m;
     }
 
+    /**
+     * 获取推荐电影
+     * @param movieId
+     * @return
+     */
+    @RequestMapping("getMovieRelated")
+    public List<Movie> getMovieRelated(@RequestParam("movieId")String movieId){
+        List<Movie> list = new ArrayList<>();
+        Movie m = movieService.getMovieById(movieId);
+        list.addAll(movieService.getMoviesByActor(m));
+        list.addAll(movieService.getMoviesByType(m));
+        Set<Movie> set = new HashSet<>(list);
+        set.remove(m);
+        System.out.println(set.size());
+        list = new ArrayList<>(set);
+        Random r = new Random();
+        while(list.size() > 8){
+            list.remove(r.nextInt(list.size() - 4) + 4);
+        }
+        list.forEach(ms ->{
+            ms.setDirWList(dirWService.getDirWsByMovieId(ms.getMovieId()));
 
+            dirWService.setDirWsStatus( ms.getDirWList(),ms.getMovieId());
 
+            if(ms.getMovieInfo()!= null){
+                String info = ms.getMovieInfo();
+                ms.setMovieInfo(info.length() > 80 ? info.substring(0, 80)+"..." : info);
+            }
+        });
+        return list;
+    }
+
+    @RequestMapping("toMovieGrid")
+    public ModelAndView toMovieGrid(){
+        ModelAndView m = new ModelAndView();
+        m.addObject(10);
+        m.setViewName("moviegrid");
+        return m;
+    }
+
+    @RequestMapping("getMoviesByActorId")
+    public List<Movie> getMoviesByActorId(String actorId){
+        return movieService.getMovieByActorId(actorId);
+    }
 
 }

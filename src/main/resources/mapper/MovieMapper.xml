@@ -340,6 +340,69 @@
         select movie_id from (
             select count(*) as c,movie_id from comment group by movie_id
         ) m order by c
-    ) and region_id = #{regionId} limit 10
+    ) and region_id = #{regionId} and status != -1 limit 10
+  </select>
+
+  <select id="getMoviesByActorId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from movie where movie_id in (
+        select movie_id from movie_actor where actor_id = #{actorId}
+      ) and status != -1 order by  rate limit 2;
+  </select>
+
+  <select id="getMoviesByType" resultMap="BaseResultMap">
+    SELECT distinct movie.* FROM
+    (SELECT movie_id FROM movie_type
+    WHERE type_id IN
+          <foreach collection="typeList" item="type" open="(" close=")" separator=",">
+            #{type.typeId}
+          </foreach>
+    )
+    test
+    left JOIN movie ON movie.movie_id = test.movie_id
+    where movie.status != -1
+    ORDER BY rate DESC limit 20
+  </select>
+
+  <select id="getMoviesByPage" resultMap="BaseResultMap" parameterType="com.ws.VO.QueryMoviesVO">
+    select * from movie
+    <where>
+      <if test="vo.name != null and vo.name != ''">
+        and  LOCATE(#{vo.name},`name`) > 0 OR LOCATE(#{vo.name},`alias`) > 0
+      </if>
+
+      <if test="vo.region != null and vo.region.size > 0">
+        and region_id in
+            <foreach collection="vo.region" item="re" open="(" close=")" separator=",">
+              #{re}
+            </foreach>
+      </if>
+      <if test="vo.type != null and vo.type.size > 0">
+        and movie_id in
+        (
+            select movie_id from movie_type where type_id in
+              <foreach collection="vo.type" item="ty" open="(" close=")" separator=",">
+                  #{ty}
+              </foreach>
+        )
+      </if>
+    <if test="vo.earlyDate != null">
+      AND release_date &gt;= #{vo.earlyDate,jdbcType=DATE}
+    </if>
+
+    <if test="vo.latedDate != null">
+      AND release_date &lt;= #{vo.latedDate,jdbcType=DATE}
+    </if>
+    <if test="vo.minScore != null">
+      and rate &gt;= #{vo.minScore}
+    </if>
+    <if test="vo.maxScore != null">
+      and rate &lt;= #{vo.maxScore}
+    </if>
+    </where>
+  </select>
+  <select id="getMovieByActorId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from movie where movie_id in (
+        select movie_id from movie_actor where actor_id = #{actorId}
+      )
   </select>
 </mapper>

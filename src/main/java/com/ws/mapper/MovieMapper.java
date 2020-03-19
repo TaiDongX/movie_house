@@ -1,8 +1,13 @@
 package com.ws.mapper;
 
+import com.ws.VO.QueryMoviesVO;
 import com.ws.bean.Movie;
 import com.ws.bean.MovieExample;
+
+import java.util.Collection;
 import java.util.List;
+
+import com.ws.bean.Type;
 import org.apache.ibatis.annotations.Param;
 
 public interface MovieMapper {
@@ -29,4 +34,12 @@ public interface MovieMapper {
     int updateByPrimaryKey(Movie record);
 
     List<Movie> getMostReviewedMovies(int regionId);
+
+    List<Movie> getMoviesByActorId(String actorId);
+
+    List<Movie> getMoviesByType(@Param("typeList")List<Type> typeList);
+
+    List<Movie> getMoviesByPage(@Param("vo") QueryMoviesVO vo);
+
+    List<Movie> getMovieByActorId(String actorId);
 }

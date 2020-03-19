@@ -6,7 +6,7 @@
 <html class="ie ie8 no-js" lang="en-US">
 <![endif]-->
 <!--[if !(IE 7) | !(IE 8)  ]><!-->
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
 	<!-- Basic need -->
 	<title>Open Pediatrics</title>
@@ -23,14 +23,73 @@
 	<meta name="format-detection" content="telephone-no">
 
 	<!-- CSS files -->
-	<link rel="stylesheet" href="css/plugins.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="/static/css/plugins.css">
+	<link rel="stylesheet" href="/static/css/style.css">
+	<script src="/static/js/jquery.js"></script>
+ 	<script type="text/javascript">
+		$(function () {
+			getMoviesByActorId();
 
+			$("#showAllMovies").click(function () {
+					$("#overviewceb").hide();
+					$("#filmography").show();
+					$(".tabs-mv li:nth-child(4)").addClass("active");
+					$(".tabs-mv li:not(:nth-child(4))").removeClass("active");
+			})
+		});
+		function getMoviesByActorId() {
+			$.ajax({
+				type: "get",
+				url: "/movie/getMoviesByActorId",
+				data:'actorId='+$("#actorId").val(),
+				dataType:"json",
+				success :function (list) {
+					$("#MovieTotal").text(list.length+' ');
+					var s = '';
+					for(var i = 0;i < list.length && i < 2; i++){
+						var movie = list[i];
+						s+='<div class="cast-it">'+
+						'<div class="cast-left cebleb-film">'+
+						'<img src="/static/img/front//uploads/film1.jpg" alt=""><div>'+
+						'<a href="#">'+movie.name+'</a>'+
+						'</div></div> <p>...  ';
+						for(var x = 0;x < movie.typeList.length;x++){
+							var type = movie.typeList[x];
+							s += type.typeName+' , ';
+						}
+						s= s.substr(0,s.length-2);
+						s+='</p> </div>';
+					}
+					$("#overMoviesItem").html(s);
+					if(list.length < 2){
+						$("#showAllMovies").hide();
+					}
+					var str = '';
+
+					for(var j = 0; j < list.length && j < 10; j++){
+
+						var movie = list[j];
+						str+='<div class="cast-it">'+
+						'<div class="cast-left cebleb-film">'+
+						'<img src="/static/img/front//uploads/film1.jpg" alt=""><div>'+
+						'<a href="#">'+movie.name+'</a></div></div><p>';
+						for(var y = 0;y < movie.typeList.length;y++){
+							var type = movie.typeList[y];
+							str += type.typeName+' , ';
+						}
+						str = str.substr(0,str.length-2);
+						str += '</p></div>';
+					}
+					$("#AllMovieItems").html(str);
+				}
+			})
+		}
+	</script>
 </head>
 <body>
 <!--preloading-->
 <div id="preloader">
-    <img class="logo" src="images/logo1.png" alt="" width="119" height="58">
+    <img class="logo" src="/static/img/front//logo1.png" alt="" width="119" height="58">
     <div id="status">
         <span></span>
         <span></span>
@@ -131,7 +190,7 @@
 							<span></span>
 						</div>
 				    </div>
-				    <a href="index_light.html"><img class="logo" src="images/logo1.png" alt="" width="119" height="58"></a>
+				    <a href="index.html"><img class="logo" src="/static/img/front//logo1.png" alt="" width="119" height="58"></a>
 			    </div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse flex-parent" id="bs-example-navbar-collapse-1">
@@ -144,9 +203,9 @@
 							Home <i class="fa fa-angle-down" aria-hidden="true"></i>
 							</a>
 							<ul class="dropdown-menu level1">
-								<li><a href="index_light.html">Home 01</a></li>
-								<li><a href="homev2_light.html">Home 02</a></li>
-								<li><a href="homev3_light.html">Home 03</a></li>
+								<li><a href="index.html">Home 01</a></li>
+								<li><a href="homev2.html">Home 02</a></li>
+								<li><a href="homev3.html">Home 03</a></li>
 							</ul>
 						</li>
 						<li class="dropdown first">
@@ -157,13 +216,13 @@
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown" >Movie grid<i class="ion-ios-arrow-forward"></i></a>
 									<ul class="dropdown-menu level2">
-										<li><a href="moviegrid_light.html">Movie grid</a></li>
-										<li><a href="moviegridfw_light.html">movie grid full width</a></li>
+										<li><a href="moviegrid.html">Movie grid</a></li>
+										<li><a href="moviegridfw.html">movie grid full width</a></li>
 									</ul>
 								</li>			
-								<li><a href="movielist_light.html">Movie list</a></li>
-								<li><a href="moviesingle_light.html">Movie single</a></li>
-								<li class="it-last"><a href="seriessingle_light.html">Series single</a></li>
+								<li><a href="movielist.html">Movie list</a></li>
+								<li><a href="moviesingle.html">Movie single</a></li>
+								<li class="it-last"><a href="seriessingle.html">Series single</a></li>
 							</ul>
 						</li>
 						<li class="dropdown first">
@@ -171,10 +230,10 @@
 							celebrities <i class="fa fa-angle-down" aria-hidden="true"></i>
 							</a>
 							<ul class="dropdown-menu level1">
-								<li><a href="celebritygrid01_light.html">celebrity grid 01</a></li>
-								<li><a href="celebritygrid02_light.html">celebrity grid 02 </a></li>
-								<li><a href="celebritylist_light.html">celebrity list</a></li>
-								<li class="it-last"><a href="celebritysingle_light.html">celebrity single</a></li>
+								<li><a href="celebritygrid01.html">celebrity grid 01</a></li>
+								<li><a href="celebritygrid02.html">celebrity grid 02 </a></li>
+								<li><a href="celebritylist.html">celebrity list</a></li>
+								<li class="it-last"><a href="celebritySingle.html">celebrity single</a></li>
 							</ul>
 						</li>
 						<li class="dropdown first">
@@ -182,9 +241,9 @@
 							news <i class="fa fa-angle-down" aria-hidden="true"></i>
 							</a>
 							<ul class="dropdown-menu level1">
-								<li><a href="bloglist_light.html">blog List</a></li>
-								<li><a href="bloggrid_light.html">blog Grid</a></li>
-								<li class="it-last"><a href="blogdetail_light.html">blog Detail</a></li>
+								<li><a href="bloglist.html">blog List</a></li>
+								<li><a href="bloggrid.html">blog Grid</a></li>
+								<li class="it-last"><a href="blogdetail.html">blog Detail</a></li>
 							</ul>
 						</li>
 						<li class="dropdown first">
@@ -192,10 +251,10 @@
 							community <i class="fa fa-angle-down" aria-hidden="true"></i>
 							</a>
 							<ul class="dropdown-menu level1">
-								<li><a href="userfavoritegrid_light.html">user favorite grid</a></li>
-								<li><a href="userfavoritelist_light.html">user favorite list</a></li>
-								<li><a href="userprofile_light.html">user profile</a></li>
-								<li class="it-last"><a href="userrate_light.html">user rate</a></li>
+								<li><a href="userfavoritegrid.html">user favorite grid</a></li>
+								<li><a href="userfavoritelist.html">user favorite list</a></li>
+								<li><a href="userprofile.html">user profile</a></li>
+								<li class="it-last"><a href="userrate.html">user rate</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -230,220 +289,142 @@
 </header>
 <!-- END | Header -->
 
-    	<div class="buster-light">
-<div class="hero common-hero">
+<div class="hero hero3">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="hero-ct">
-					<h1>celebrity listing - grid</h1>
-					<ul class="breadcumb">
-						<li class="active"><a href="#">Home</a></li>
-						<li> <span class="ion-ios-arrow-right"></span> celebrity listing</li>
-					</ul>
-				</div>
+				<!-- <h1> movie listing - list</h1>
+				<ul class="breadcumb">
+					<li class="active"><a href="#">Home</a></li>
+					<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+				</ul> -->
 			</div>
 		</div>
 	</div>
 </div>
-<!-- celebrity grid v1 section-->
-<div class="page-single">
+<!-- celebrity single section-->
+
+<div class="page-single movie-single cebleb-single">
 	<div class="container">
-		<div class="row ipad-width2">
-			<div class="col-md-9 col-sm-12 col-xs-12">
-				<div class="topbar-filter">
-					<p>Found <span>1,608 celebrities</span> in total</p>
-					<label>Sort by:</label>
-					<select>
-						<option value="popularity">Popularity Descending</option>
-						<option value="popularity">Popularity Ascending</option>
-						<option value="rating">Rating Descending</option>
-						<option value="rating">Rating Ascending</option>
-						<option value="date">Release date Descending</option>
-						<option value="date">Release date Ascending</option>
-					</select>
-					<a href="celebritylist.html" class="list"><i class="ion-ios-list-outline "></i></a>
-					<a  href="celebritygrid01.html" class="grid"><i class="ion-grid active"></i></a>
-				</div>
-				<div class="celebrity-items">
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb1.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Tom Hardy</a></h2>
-							<span>actor, usa</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritylist.html"><img src="images/uploads/ceb2.jpg" alt=""></a>						
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Leonardo DiCaprio</a></h2>
-							<span>actor, mexico</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb3.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Emma Stone</a></h2>
-							<span>Actress, usa</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"> <img src="images/uploads/ceb4.jpg" alt=""></a>
-						
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Olga Kurylenko</a></h2>
-							<span>Actress, sweden</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb5.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Micheal Bay</a></h2>
-							<span>Director, france</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb6.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Martin Scorsese</a></h2>
-							<span>Director, italy</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb7.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">TJohnson Staham</a></h2>
-							<span>actor, uk</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb8.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Haley Bennett</a></h2>
-							<span>actress, france</span>
-						</div>
-					</div>
-					<div class="ceb-item">
-						<a href="celebritysingle.html"><img src="images/uploads/ceb9.jpg" alt=""></a>
-						<div class="ceb-infor">
-							<h2><a href="celebritylist.html">Teresa Palmer</a></h2>
-							<span>actress, uk</span>
-						</div>
-					</div>
-				</div>
-				<div class="topbar-filter">
-					<label>Reviews per page:</label>
-					<select>
-						<option value="range">9 Reviews</option>
-						<option value="saab">10 Reviews</option>
-					</select>
-					
-					<div class="pagination2">
-						<span>Page 1 of 6:</span>
-						<a class="active" href="#">1</a>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						<a href="#">4</a>
-						<a href="#">5</a>
-						<a href="#">6</a>
-						<a href="#"><i class="ion-arrow-right-b"></i></a>
-					</div>
+		<div class="row ipad-width">
+			<div class="col-md-4 col-sm-12 col-xs-12">
+				<div class="mv-ceb">
+					<img src="/static/img/front//uploads/cebsingle2.png" alt="">
+					<input type="hidden" th:value="${actor.actorId}" id="actorId">
 				</div>
 			</div>
-			<div class="col-md-3 col-xs-12 col-sm-12">
-				<div class="sidebar">
-						<div class="searh-form">
-						<h4 class="sb-title">Search celebrity</h4>
-						<form class="form-style-1 celebrity-form" action="#">
-							<div class="row">
-								<div class="col-md-12 form-it">
-									<label>Celebrity name</label>
-									<input type="text" placeholder="Enter keywords">
-								</div>
-								<div class="col-md-12 form-it">
-									<label>Celebrity Letter</label>
-									<select>
-									  <option value="range">A</option>
-									  <option value="saab">B</option>
-									</select>
-								</div>
-								<div class="col-md-12 form-it">
-									<label>Category</label>
-									<select>
-									  <option value="range">Actress</option>
-									  <option value="saab">Others</option>
-									</select>
-								</div>
-								<div class="col-md-12 form-it">
-									<label>Year of birth</label>
+			<div class="col-md-8 col-sm-12 col-xs-12">
+				<div class="movie-single-ct">
+					<h1 class="bd-hd" th:text="${actor.name}"></h1>
+					<p class="ceb-single" th:text="${actor.occupation}"></p>
+					<div class="social-link cebsingle-socail">
+						<a href="#"><i class="ion-social-facebook"></i></a>
+						<a href="#"><i class="ion-social-twitter"></i></a>
+						<a href="#"><i class="ion-social-googleplus"></i></a>
+						<a href="#"><i class="ion-social-linkedin"></i></a>
+					</div>
+					<div class="movie-tabs">
+						<div class="tabs">
+							<ul class="tab-links tabs-mv">
+								<li class="active"><a href="#overviewceb">概览</a></li>
+								<li><a href="#biography"> 传记</a></li>
+								<li><a href="#filmography">相关作品推荐</a></li>
+							</ul>
+						    <div class="tab-content">
+						        <div id="overviewceb" class="tab active">
+						            <div class="row">
+						            	<div class="col-md-8 col-sm-12 col-xs-12">
+
+											<div class="title-hd-sm">
+												<h4>filmography</h4>
+												<a href="#" class="time" id="showAllMovies">查看所有相关电影<i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<!-- movie cast -->
+											<div class="mvcast-item" id="overMoviesItem">
+
+											</div>
+						            	</div>
+						            	<div class="col-md-4 col-xs-12 col-sm-12">
+						            		<div class="sb-it" th:if="${actor.homePlace != null}">
+						            			<h6> 出生地:  </h6>
+						            			<p><a href="#" th:text="${actor.homePlace}"></a></p>
+						            		</div>
+						            		<div class="sb-it" th:if="${actor.birthday != '不详'}">
+						            			<h6> 出生日期: </h6>
+						            			<p th:text="${actor.birthday}"></p>
+						            		</div>
+						            		<div class="sb-it" th:if="${actor.alias != null}">
+						            			<h6> 别称:  </h6>
+						            			<p th:text="${actor.alias}"></p>
+						            		</div>
+						            		<div class="sb-it" th:if="${actor.imdbId != null}">
+						            			<h6>IMDb Id:</h6>
+						            			<p th:text="${actor.imdbId}"></p>
+						            		</div>
+
+						            		<div class="ads">
+												<img src="/static/img/front//uploads/ads1.png" alt="">
+											</div>
+						            	</div>
+						            </div>
+						        </div>
+								<div id="biography" class="tab">
 									<div class="row">
-										<div class="col-md-6">
-											<select>
-											  <option value="range">1970</option>
-											  <option value="number">Other</option>
-											</select>
+										<div class="rv-hd">
+											<div>
+												<h3>传记相关：</h3>
+												<h2 th:text="${actor.name}"></h2>
+											</div>
 										</div>
-										<div class="col-md-6">
-											<select>
-											  <option value="range">1990</option>
-											  <option value="number">others</option>
-											</select>
-										</div>
+										<p th:utext="${actor.info == null || actor.info == '' ? '暂无传记' : actor.info }"></p>
 									</div>
 								</div>
-								<div class="col-md-12 ">
-									<input class="submit" type="submit" value="submit">
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="ads">
-						<img src="images/uploads/ads1.png" alt="">
-					</div>
-					<div class="celebrities">
-						<h4 class="sb-title">featured celebrity</h4>
-						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava1.jpg" alt=""></a>
-							<div class="celeb-author">
-								<h6><a href="#">Samuel N. Jack</a></h6>
-								<span>Actor</span>
-							</div>
-						</div>
-						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava2.jpg" alt=""></a>
-							<div class="celeb-author">
-								<h6><a href="#">Benjamin Carroll</a></h6>
-								<span>Actor</span>
-							</div>
-						</div>
-						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava3.jpg" alt=""></a>
-							<div class="celeb-author">
-								<h6><a href="#">Beverly Griffin</a></h6>
-								<span>Actor</span>
-							</div>
-						</div>
-						<div class="celeb-item">
-							<a href="#"><img src="images/uploads/ava4.jpg" alt=""></a>
-							<div class="celeb-author">
-								<h6><a href="#">Justin Weaver</a></h6>
-								<span>Actor</span>
-							</div>
+
+
+					       	 	<div id="filmography" class="tab">
+						        	<div class="row">
+						            	<div class="rv-hd">
+						            		<div>
+						            			<h3>电影相关： </h3>
+					       	 					<h2 th:text="${actor.name}"></h2>
+						            		</div>
+										
+						            	</div>
+						            	<div class="topbar-filter">
+											<p>总共找到 <span id="MovieTotal"></span>条电影</p>
+										<!--	<label>Filter by:</label>
+											<select>
+												<option value="popularity">Popularity Descending</option>
+												<option value="popularity">Popularity Ascending</option>
+												<option value="rating">Rating Descending</option>
+												<option value="rating">Rating Ascending</option>
+												<option value="date">Release date Descending</option>
+												<option value="date">Release date Ascending</option>
+											</select>-->
+										</div>
+										<!-- movie cast -->
+										<div class="mvcast-item" id="AllMovieItems">
+
+										</div>
+						            </div>
+					       	 	</div>
+						    </div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	</div>
 </div>
-<!--end of celebrity grid v1 section-->
-		</div>
+<!-- celebrity single section-->
+
 <!-- footer section-->
 <footer class="ht-footer">
 	<div class="container">
 		<div class="flex-parent-ft">
 			<div class="flex-child-ft item1">
-				 <a href="index.html"><img class="logo" src="images/logo1.png" alt=""></a>
+				 <a href="index.html"><img class="logo" src="/static/img/front//logo1.png" alt=""></a>
 				 <p>5th Avenue st, manhattan<br>
 				New York, NY 10001</p>
 				<p>Call us: <a href="#">(+01) 202 342 6789</a></p>
@@ -497,9 +478,8 @@
 </footer>
 <!-- end of footer section-->
 
-<script src="js/jquery.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/plugins2.js"></script>
-<script src="js/custom.js"></script>
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/plugins2.js"></script>
+<script src="/static/js/custom.js"></script>
 </body>
 </html>

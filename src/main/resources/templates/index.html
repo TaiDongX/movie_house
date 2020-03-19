@@ -142,53 +142,24 @@
 						</li>
 						<li class="dropdown first">
 							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown">
-							首页 <i class="fa fa-angle-down" aria-hidden="true"></i>
+							首页</i>
 							</a>
-							<ul class="dropdown-menu level1">
-								<li><a th:href="index.html">首页1</a></li>
-								<li><a th:href="homev2.html">首页2</a></li>
-								<li><a th:href="homev3.html">首页3</a></li>
-							</ul>
 						</li>
 						<li class="dropdown first">
 							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
-							电影<i class="fa fa-angle-down" aria-hidden="true"></i>
+							电影</i>
 							</a>
-							<ul class="dropdown-menu level1">
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown" >Movie grid<i class="ion-ios-arrow-forward"></i></a>
-									<ul class="dropdown-menu level2">
-										<li><a href="moviegrid.html">电影网格1</a></li>
-										<li><a href="moviegridfw.html">电影网格2</a></li>
-									</ul>
-								</li>
-								<li><a href="movielist.html">电影列表</a></li>
-								<li><a href="moviesingle.html">电影详情</a></li>
-								<li class="it-last"><a href="seriessingle.html">Series single</a></li>
-							</ul>
 						</li>
 						<li class="dropdown first">
 							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
-							明星 <i class="fa fa-angle-down" aria-hidden="true"></i>
+							名人 </i>
 							</a>
-							<ul class="dropdown-menu level1">
-								<li><a href="celebritygrid01.html">明星网格1</a></li>
-								<li><a href="celebritygrid02.html">明星网格2 </a></li>
-								<li><a href="celebritylist.html">明星列表</a></li>
-								<li class="it-last"><a href="celebritysingle.html">明星详情</a></li>
-							</ul>
 						</li>
 
 						<li class="dropdown first">
 							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
-							社区 <i class="fa fa-angle-down" aria-hidden="true"></i>
+							社区 </i>
 							</a>
-							<ul class="dropdown-menu level1">
-								<li><a href="userfavoritegrid.html">用户最爱网格</a></li>
-								<li><a href="userfavoritelist.html">用户最爱列表</a></li>
-								<li><a href="userprofile.html">用户资料</a></li>
-								<li class="it-last"><a href="userrate.html">用户评分</a></li>
-							</ul>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav flex-child-menu menu-right">
@@ -238,8 +209,7 @@
 	    				<a href="#"><img src="/static/img/front/movies/1291546.jpg" alt="" width="285" height="437"></a>
 	    			</div>
 	    			<div class="title-in">
-
-	    				<h6><a href="#" th:text="${m.name}"></a></h6>
+	    				<h6><a th:href="'/movie/getMovieById?movieId='+${m.movieId}" th:text="${m.name}"></a></h6>
 	    				<p><i class="ion-android-star"></i><span th:text="${m.rate}"></span> /10</p>
 	    			</div>
 	    		</div>
@@ -283,14 +253,14 @@
 												<img src="/static/img/front/movies/1291546.jpg" alt="" width="185" height="284">
 											</div>
 											<div class="hvr-inner">
-												<a href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i></a>
+												<a th:href="'/movie/getMovieById?movieId='+${cn1.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i></a>
 											</div>
 											<div class="title-in">
 												<h6><a href="#" th:text="${cn1.name}"></a></h6>
 												<p><i class="ion-android-star"></i><span th:text="${cn1.rate}"></span> /10</p>
 											</div>
 										</div>
-									</div>
+									</div>·
 									
 				            	</div>
 				            </div>
@@ -304,7 +274,7 @@
 					            				<img src="/static/img/front/movies/1291546.jpg" alt="" width="185" height="284">
 					            			</div>
 					            			<div class="hvr-inner">
-					            				<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+					            				<a th:href="'/movie/getMovieById?movieId='+${cn2.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 					            			</div>
 					            			<div class="title-in">
 					            				<h6><a href="#" th:text="${cn2.name}"></a></h6>
@@ -324,7 +294,7 @@
 					            				<img src="/static/img/front/movies/1291546.jpg" alt="" width="185" height="284">
 					            			</div>
 					            			<div class="hvr-inner">
-					            				<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+					            				<a  th:href="'/movie/getMovieById?movieId='+${cn3.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 					            			</div>
 					            			<div class="title-in">
 					            				<h6><a href="#" th:text="${cn3.name}"></a></h6>
@@ -344,7 +314,7 @@
 					            				<img src="/static/img/front/movies/1291546.jpg" alt="" width="185" height="284">
 					            			</div>
 					            			<div class="hvr-inner">
-					            				<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+					            				<a  th:href="'/movie/getMovieById?movieId='+${cn4.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 					            			</div>
 					            			<div class="title-in">
 					            				<h6><a href="#"  th:text="${cn4.name}"></a></h6>
@@ -378,7 +348,7 @@
 					            				<img src="/static/img/front/movies/1291578.jpg" alt="" width="185" height="284">
 					            			</div>
 					            			<div class="hvr-inner">
-					            				<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+					            				<a th:href="'/movie/getMovieById?movieId='+${am1.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 					            			</div>
 					            			<div class="title-in">
 					            				<h6><a href="#" th:text="${am1.name}"></a></h6>
@@ -398,7 +368,7 @@
 					            				<img src="/static/img/front/movies/1291578.jpg" alt="" width="185" height="284">
 					            			</div>
 					            			<div class="hvr-inner">
-					            				<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+					            				<a th:href="'/movie/getMovieById?movieId='+${am2.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 					            			</div>
 					            			<div class="title-in">
 					            				<h6><a href="#" th:text="${am2.name}"></a></h6>
@@ -418,7 +388,7 @@
 												<img src="/static/img/front/movies/1291578.jpg" alt="" width="185" height="284">
 											</div>
 											<div class="hvr-inner">
-												<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+												<a  th:href="'/movie/getMovieById?movieId='+${am3.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 											</div>
 											<div class="title-in">
 												<h6><a href="#" th:text="${am3.name}"></a></h6>
@@ -438,7 +408,7 @@
 												<img src="/static/img/front/movies/1291578.jpg" alt="" width="185" height="284">
 											</div>
 											<div class="hvr-inner">
-												<a  href="moviesingle.html"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
+												<a th:href="'/movie/getMovieById?movieId='+${am4.movieId}"> 了解更多 <i class="ion-android-arrow-dropright"></i> </a>
 											</div>
 											<div class="title-in">
 												<h6><a href="#" th:text="${am4.name}"></a></h6>

@@ -1,5 +1,7 @@
 package com.ws.service;
 
+import com.github.pagehelper.PageInfo;
+import com.ws.VO.QueryCeleVO;
 import com.ws.bean.Actor;
 import com.ws.bean.Movie;
 
@@ -16,4 +18,8 @@ public interface ActorService {
     List<Actor> getActorsFamous();
 
     List<Actor> getActorsByMovieId(String movieId);
+
+    PageInfo<Actor> getActorsByPage(QueryCeleVO vo);
+
+    Actor getActorsById(String id);
 }

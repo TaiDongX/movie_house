@@ -1,5 +1,6 @@
 package com.ws.service;
 
+import com.github.pagehelper.PageInfo;
 import com.ws.bean.Comment;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
  */
 public interface CommentService {
 
-    List<Comment> getCommentsByMovieId(String movieId,Integer size,Integer page,String orderBy);
+    PageInfo<Comment> getCommentsByMovieId(String movieId, Integer size, Integer page, String orderBy);
 }

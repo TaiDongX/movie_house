@@ -1,5 +1,6 @@
 package com.ws.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.ws.bean.Comment;
 import com.ws.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,13 @@ public class CommentController {
      * @return
      */
     @RequestMapping("getCommentsById")
-    public List<Comment> getCommentsById(@RequestParam("movieId")String movieId,
-                                         @RequestParam("size")Integer size,
-                                         @RequestParam("page")Integer page,
-                                         @RequestParam("orderBy")String orderBy){
-        return  commentService.getCommentsByMovieId(movieId,size,page,orderBy);
+    public PageInfo<Comment> getCommentsById(@RequestParam("movieId")String movieId,
+                                    @RequestParam("size")Integer size,
+                                    @RequestParam("page")Integer page,
+                                    @RequestParam("orderBy")String orderBy){
+
+
+        return commentService.getCommentsByMovieId(movieId,size,page,orderBy);
     }
 
 }

@@ -1,7 +1,10 @@
 package com.ws.service;
 
+import com.github.pagehelper.PageInfo;
+import com.ws.VO.QueryMoviesVO;
 import com.ws.bean.Movie;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,4 +28,12 @@ public interface MovieService {
     List<Movie> getHostMovies();
 
     Movie getMovieById(String movieId);
+
+    List<Movie> getMoviesByActor(Movie m);
+
+    List<Movie> getMoviesByType(Movie m);
+
+    PageInfo<Movie> getMoviesByPage(QueryMoviesVO vo);
+
+    List<Movie> getMovieByActorId(String actorId);
 }

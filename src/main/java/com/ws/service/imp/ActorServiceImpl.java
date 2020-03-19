@@ -1,5 +1,9 @@
 package com.ws.service.imp;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ws.VO.QueryCeleVO;
 import com.ws.bean.Actor;
 import com.ws.bean.Movie;
 import com.ws.mapper.ActorMapper;
@@ -30,5 +34,17 @@ public class ActorServiceImpl implements ActorService {
     public List<Actor> getActorsByMovieId(String movieId) {
         return actorMapper.getActorsByMovieId(movieId);
     }
+
+    @Override
+    public PageInfo<Actor> getActorsByPage(QueryCeleVO vo) {
+        PageHelper.startPage(vo.page, vo.size);
+        return new PageInfo<>(actorMapper.getActorsByPage(vo));
+    }
+
+    @Override
+    public Actor getActorsById(String id) {
+        return actorMapper.selectByPrimaryKey(id);
+    }
+
 
 }

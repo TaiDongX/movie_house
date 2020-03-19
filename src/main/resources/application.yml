@@ -45,7 +45,6 @@ mybatis:
 
 logging:
   level:
-    com:
-      looedu:
+    com.ws:
         mapper: debug
 

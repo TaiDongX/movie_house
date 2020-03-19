@@ -1,5 +1,5 @@
 //preloading for page
-//������ȫ��õ�Bootstrapģ�壺http://www.bootstrapmb.com
+//������ȫ��õ�Bootstrapģ�壺http://www.bootstrapmb.com
 $(window).on('load', function() { // makes sure the whole site is loaded 
 	var status = $('#status');
 	var preloader = $('#preloader');
@@ -566,4 +566,142 @@ $(function(){
 
 	// });
 
+	$("#maxScore").change(function(){
+		var score =  $("#maxScore").val();
+		for(var i=10;i>score;i--){
+			$("#minScore option:nth-child("+i+")").css('display','none');
+		}
+		for(var i=1;i<=score;i++){
+			$("#minScore option:nth-child("+i+")").css('display','block');
+		}
+	})
+	$("#minScore").change(function(){
+		var score =  $("#minScore").val();
+		for(var i=10;i>score;i--){
+			$("#maxScore option:nth-child("+i+")").css('display','block');
+		}
+		for(var i=1;i<=score;i++){
+			$("#maxScore option:nth-child("+i+")").css('display','none');
+		}
+	})
+
+	$("#earlyDate").change(function(){
+		var date =  $("#earlyDate").val();
+		date = (date-1900)/20 + 1;
+		for(var i = 1;i <= date;i++){
+			$("#lateDate option:nth-child("+i+")").css('display','none')
+		}
+		for(var i = 7;i > date;i--){
+			$("#lateDate option:nth-child("+i+")").css('display','block')
+		}
+	});
+	$("#lateDate").change(function(){
+		var date =  $("#lateDate").val();
+		date = (date-1900)/20 + 1;
+		for(var i = 1;i <= date;i++){
+			$("#earlyDate option:nth-child("+i+")").css('display','block')
+		}
+		for(var i = 7;i > date;i--){
+			$("#earlyDate option:nth-child("+i+")").css('display','none')
+		}
+	});
+
+	$("#mPrePage").click(function () {
+		getMoviesByPage($("#p4").text() - 1)
+	});
+
+	$("#mSufPage").click(function () {
+		getMoviesByPage(Number($("#p4").text()) + 1)
+	})
+
+
+
 });
+
+
+function PagingManage(pageNum, currentPage) {
+
+
+	//给每个button赋值（第一个默认为1）
+	$("#p2").text(currentPage-2);
+	$("#p3").text(currentPage-1);
+	$("#p4").text(currentPage);
+	$("#p5").text(currentPage+1);
+	$("#p6").text(currentPage+2);
+	$("#p7").text(pageNum);
+
+	//可改变当前页的button样式
+	$("#p4").addClass("active");
+
+	//先处理"上一页"和"下一页"的情况
+	//如果当前页为首页
+	if(currentPage===1)
+	{
+		$("#mPrePage").hide();
+	}
+	else {
+		$("#mPrePage").show();
+	}
+
+	if(currentPage===pageNum)    //如果当前页为末页
+	{
+		$("#mSufPage").hide();
+	}
+	else{
+		$("#mSufPage").show();
+	}
+
+	//处理当前页小于等于3的特殊情况
+	if(currentPage <= 3){
+		$("#mPrePoint").hide();
+		$("#p1").hide();
+	}//当前页是4还需要hide掉第一个省略号按钮（！重要）
+	else if(currentPage===4){
+		$("#mPrePoint").hide();
+	}else{
+		$("#mPrePoint").show();
+		$("#p1").show();
+	}
+	//当前页是1还需要hide掉第二第三个按钮
+	if(currentPage===1)
+	{
+		$("#p2").hide();
+		$("#p3").hide();
+	}
+	//当前页是2则也需要hide掉第二个按钮（此时为-1）
+	else if(currentPage===2)
+	{
+		$("#p2").hide();
+	}else{
+		$("#p2").show();
+		$("#p3").show();
+	}
+
+	//最末端的特殊情况处理和最前端是一样的
+	if(currentPage >= pageNum-2){
+		$("#mSufPoint").hide();
+		$("#p7").hide();
+	}
+	else if(currentPage===pageNum-3){
+		$("#mSufPoint").hide();
+	}
+	else{
+		$("#mSufPoint").show();
+		$("#p7").show();
+	}
+
+
+	if(currentPage=== pageNum - 1) {
+		$("#p6").hide();
+		$("#p5").show();
+	}
+	else if(currentPage===pageNum){
+		$("#p5").hide();
+		$("#p6").hide();
+	}
+	else{
+		$("#p5").show();
+		$("#p6").show();
+	}
+
+}

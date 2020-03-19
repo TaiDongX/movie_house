@@ -1,5 +1,6 @@
 package com.ws.mapper;
 
+import com.ws.VO.QueryCeleVO;
 import com.ws.bean.Actor;
 import com.ws.bean.ActorExample;
 import java.util.List;
@@ -31,4 +32,8 @@ public interface ActorMapper {
     List<Actor> getActorsFamous();
 
     List<Actor> getActorsByMovieId(String movieId);
+
+    List<Actor> getActorsByPage(@Param("vo") QueryCeleVO vo);
+
+
 }

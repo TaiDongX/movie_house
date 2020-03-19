@@ -40,6 +40,13 @@ public class Movie {
     
     private Region region;
 
+    public Movie() {
+    }
+
+    public Movie(String movieId) {
+        this.movieId = movieId;
+    }
+
     public String getMovieId() {
         return movieId;
     }
@@ -201,5 +208,18 @@ public class Movie {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Movie tmp = (Movie) obj;
+        return tmp.movieId.equals(this.movieId);
+
     }
 }

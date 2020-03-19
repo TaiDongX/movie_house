@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface DirWService {
     List<DirW> getDirWsByMovieId(String movieId);
+
+    void setDirWsStatus(List<DirW> list,String movieId);
 }

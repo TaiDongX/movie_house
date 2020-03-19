@@ -1,0 +1,12 @@
+
+						<a id="mPrePage">上一页</a>
+						<a href="javaScript:void(0)" id="p1">1</a>
+						<span id="mPrePoint">...</span>
+						<a href="javaScript:void(0)" id="p2">2</a>
+						<a href="javaScript:void(0)" id="p3">3</a>
+						<a href="javaScript:void(0)" id="p4">4</a>
+						<a href="javaScript:void(0)" id="p5">5</a>
+						<a href="javaScript:void(0)" id="p6">6</a>
+						<span id="mSufPoint">...</span>
+						<a href="javaScript:void(0)" id="p7">79</a>
+						<a href="javaScript:void(0)" id="mSufPage">下一页</a>

@@ -30,4 +30,6 @@ public class ActorController {
     public List<Actor> getActorsById(@RequestParam("movieId")String movieId){
         return actorService.getActorsByMovieId(movieId);
     }
+
+
 }
