@@ -96,7 +96,7 @@
     select 
     <include refid="Base_Column_List" />
     from movie
-    where movie_id = #{movieId,jdbcType=VARCHAR}
+    where movie_id = #{movieId,jdbcType=VARCHAR} and status != -1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from movie
@@ -356,6 +356,7 @@
           <foreach collection="typeList" item="type" open="(" close=")" separator=",">
             #{type.typeId}
           </foreach>
+        and type_id != 1
     )
     test
     left JOIN movie ON movie.movie_id = test.movie_id
@@ -399,10 +400,18 @@
       and rate &lt;= #{vo.maxScore}
     </if>
     </where>
+    and status != -1
   </select>
   <select id="getMovieByActorId" resultMap="BaseResultMap" parameterType="java.lang.String">
     select * from movie where movie_id in (
         select movie_id from movie_actor where actor_id = #{actorId}
       )
+    and status != -1
+
+  </select>
+  <select id="getMovieByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from movie
+    left join user_collect uc on movie.movie_id = uc.movie_id
+    where user_id = #{userId} and status != -1
   </select>
 </mapper>

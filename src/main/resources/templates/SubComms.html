@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/static/css/bootstrap.min.css" type="text/css">
+    <script src="/static/demo/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/starScore.js"></script>
+    <script type="text/javascript">
+        $(function() {
+
+            scoreFun($("#starttwo"),{
+                fen_d:16,//每一个a的宽度
+                ScoreGrade: 10 //a的个数5
+            });
+            //显示分数
+            $(".show_number li p").each(function(index, element) {
+                var num= $(this).attr("tip");
+                var www=num * 2 * 16;//
+                $(this).css("width",www);
+            });
+
+            var isPublished = true;
+            $.ajax({
+                type : "GET",
+                url : "/movie/isPublish",
+                data : "movieId="+$("#movieId").val(),
+
+                success : function(msg) {
+                    isPublished = msg;
+                }
+            });
+            $("#button").click(function() {
+                var score = $("#stars").val();
+                var comInfo = $("#comInfo").val();
+                if(isPublished){
+                    alert("电影上映之后才可以评分！");
+                    return;
+                }
+                else if(!isPublished && score === ""){
+                    alert("请先为本电影打分哦");
+                    return;
+                }
+                if(comInfo === ""){
+                    alert("先说点什么！");
+                    return;
+                }
+                var s = '';
+                s+='info='+$("#comInfo").val();
+                s+='&movieId='+$("#movieId").val();
+                s+='&userId='+$("#userId").val();
+                s+='&rate='+$("#stars").val();
+                alert(s);
+                $.ajax({
+                    type : "POST",
+                    url : "/comment/addComment",
+                    data : s,
+                    success : function(msg) {
+                        alert(msg);
+                        window.location.reload();
+                    }
+                });
+
+            })
+        });
+    </script>
+</head>
+<style>
+    body,li,p,ul {
+        margin: 0;
+        padding: 0;
+    }
+    ul, li, ol { list-style: none; }
+
+    /* 重置文本格式元素 */
+    a {
+        text-decoration: none;
+        cursor: pointer;
+        color:#333333;
+        font-size:14px;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+
+    .block{
+        width:100%;
+        margin:0 0 20px 0;
+        padding-top:10px;
+        padding-left:50px;
+        line-height:21px;
+    }
+    .block .star_score{
+        float:left;
+    }
+
+    .block p,.block .attitude{
+        padding-left:20px;
+        line-height:21px;
+        display:inline-block;
+    }
+    .block p span{
+        color:#C00;
+        font-size:16px;
+        font-family:Georgia, "Times New Roman", Times, serif;
+    }
+
+    .star_score {
+        background:url(/static/img/front/starky.png);
+        width:250px;
+        height:15px;
+        position:relative;
+    }
+
+    .star_score a{
+        height:14px;
+        display:block;
+        text-indent:-999em;
+        position:absolute;
+        left:0;
+    }
+
+    .star_score a:hover{
+        background:url(/static/img/front/starsy.png);
+        left:0;
+    }
+
+    .star_score a.clibg{
+        background:url(/static/img/front/starsy.png);
+        left:0;
+    }
+    #starttwo{
+        width: 160px;
+        position: relative;
+        top: 1px;
+        left: 260px;
+    }
+
+    #starttwo .star_score {
+        background:url(/static/img/front/starky.png);
+    }
+
+    #starttwo .star_score a:hover{
+        background:url(/static/img/front/starsy.png);
+        left:0;
+    }
+
+    #starttwo .star_score a.clibg{
+        background:url(/static/img/front/starsy.png);
+        left:0;
+    }
+
+    /*星星样式*/
+
+    .show_number li{
+        width:240px;
+        border:1px solid #ccc;
+        padding:10px;
+        margin-right:5px;
+        margin-bottom:20px;
+    }
+
+
+    .atar_Show p{
+        background:url(/static/img/front/starsy.png);
+        left:0;
+        height:10px;
+        width:134px;
+    }
+
+    .show_number li span{
+        display:inline-block;
+        line-height:21px;
+    }
+    #commForm label{
+        font-family: "Noto Sans", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    #rate {
+        position: relative;
+        top: 30px;
+        left: 200px;
+    }
+    .form-group label{
+        position: relative;
+        left: 300px;
+        bottom: 10px;
+    }
+    #comInfo {
+        background-color: #233A50;
+        color: white;
+    }
+
+    body {
+        background-color: #020D18;
+    }
+    #button{
+       position: relative;
+        left: 640px;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px  solid #2e6da4;
+        border-radius: 4px;
+        color: #fff;
+        background-color: #337ab7;
+    }
+
+
+</style>
+
+<body>
+<div id="comments">
+    <form role="form" id="commForm">
+        <label id="rate">为本电影评分：</label>
+        <div id="starttwo" class="block clearfix">
+            <div  class="star_score"></div>
+            <input type="hidden" id="stars" value="" />
+        </div>
+        <div class="form-group">
+            <label for="comInfo">分享你的看法：</label>
+            <textarea class="form-control" id="comInfo" name="comInfo" rows="6"></textarea>
+        </div>
+        <button type="button"  id="button">发表评论</button>
+    </form>
+</div>
+
+</body>
+</html>

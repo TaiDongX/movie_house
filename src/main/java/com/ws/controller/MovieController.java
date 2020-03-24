@@ -13,6 +13,8 @@ import com.ws.service.DirWService;
 import com.ws.service.MovieService;
 import jdk.nashorn.internal.ir.LiteralNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +44,8 @@ public class MovieController {
     @Autowired
     private DirWService dirWService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -60,25 +64,33 @@ public class MovieController {
     @RequestMapping("/getIndexMovies")
     public ModelAndView getIndexMovies(){
         ModelAndView m = new ModelAndView();
-        IndexInfoVO infoVO = new IndexInfoVO();
-        // 热门电影
-        infoVO.hostMovies = movieService.getHostMovies();
+        IndexInfoVO infoVO ;
+        ValueOperations<String,IndexInfoVO> vo = redisTemplate.opsForValue();
+        if(vo.get("info") == null) {
+            infoVO = new IndexInfoVO();
+            // 热门电影
+            infoVO.hostMovies = movieService.getHostMovies();
 
-        // 最受欢迎的电影
-        infoVO.popular1 = movieService.getMoviesByRegion(1, "collect_count DESC");
-        infoVO.popular2 = movieService.getMoviesByRegion(2, "collect_count DESC");
-        // 即将上映的电影
-        infoVO.comingSoon1 = movieService.getMoviesComingSoon(1);
-        infoVO.comingSoon2 = movieService.getMoviesComingSoon(2);
-        // 评分最高的电影
-        infoVO.topRate1 = movieService.getMoviesByRegion(1, "rate DESC");
-        infoVO.topRate2 = movieService.getMoviesByRegion(2, "rate DESC");
-        // 讨论最多的电影
-        infoVO.mostReviewed1 = movieService.getMostReviewedMovies(1);
-        infoVO.mostReviewed2 = movieService.getMostReviewedMovies(2);
+            // 最受欢迎的电影
+            infoVO.popular1 = movieService.getMoviesByRegion(1, "collect_count DESC");
+            infoVO.popular2 = movieService.getMoviesByRegion(2, "collect_count DESC");
+            // 即将上映的电影
+            infoVO.comingSoon1 = movieService.getMoviesComingSoon(1);
+            infoVO.comingSoon2 = movieService.getMoviesComingSoon(2);
+            // 评分最高的电影
+            infoVO.topRate1 = movieService.getMoviesByRegion(1, "rate DESC");
+            infoVO.topRate2 = movieService.getMoviesByRegion(2, "rate DESC");
+            // 讨论最多的电影
+            infoVO.mostReviewed1 = movieService.getMostReviewedMovies(1);
+            infoVO.mostReviewed2 = movieService.getMostReviewedMovies(2);
 
-        // 首页演员榜
-        infoVO.actorList = actorService.getActorsFamous();
+            // 首页演员榜
+            infoVO.actorList = actorService.getActorsFamous();
+            vo.set("info", infoVO);
+        }
+        else{
+            infoVO = vo.get("info");
+        }
         m.setViewName("index");
         m.addObject("info",infoVO);
         return m;
@@ -104,18 +116,26 @@ public class MovieController {
      */
     @RequestMapping("getMovieRelated")
     public List<Movie> getMovieRelated(@RequestParam("movieId")String movieId){
-        List<Movie> list = new ArrayList<>();
+        List<Movie> list;
         Movie m = movieService.getMovieById(movieId);
-        list.addAll(movieService.getMoviesByActor(m));
-        list.addAll(movieService.getMoviesByType(m));
-        Set<Movie> set = new HashSet<>(list);
-        set.remove(m);
-        System.out.println(set.size());
+        // 根据电影获取相应演员对应的电影
+        Set<Movie> set = new HashSet<>(movieService.getMoviesByActor(m));
+        // 如果获得的数量太少
         list = new ArrayList<>(set);
-        Random r = new Random();
-        while(list.size() > 8){
-            list.remove(r.nextInt(list.size() - 4) + 4);
+
+        if(set.size() < 9){
+            // 根据电影类型获取相关电影
+            set.addAll(movieService.getMoviesByType(m));
+            Random r = new Random();
+            list = new ArrayList<>(set);
+            while(list.size() > 9){
+                list.remove(r.nextInt(list.size() - 6) + 6);
+            }
         }
+        list.remove(m);
+        System.out.println(list.size());
+
+
         list.forEach(ms ->{
             ms.setDirWList(dirWService.getDirWsByMovieId(ms.getMovieId()));
 
@@ -137,9 +157,24 @@ public class MovieController {
         return m;
     }
 
+    /**
+     * 根据演员获取相关的电影列表
+     * @param actorId
+     * @return
+     */
     @RequestMapping("getMoviesByActorId")
     public List<Movie> getMoviesByActorId(String actorId){
         return movieService.getMovieByActorId(actorId);
+    }
+
+    /**
+     * 判断电影是否已经上映
+     * @param movieId
+     * @return
+     */
+    @RequestMapping("isPublish")
+    public boolean isPublish(String movieId){
+        return movieService.getMovieById(movieId).getReleaseDate().after(new Date());
     }
 
 }

@@ -1,8 +1,9 @@
 package com.ws.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Region {
+public class Region implements Serializable {
     private Integer regionId;
 
     private String regionName;

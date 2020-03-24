@@ -14,4 +14,8 @@ import java.util.List;
 public interface CommentService {
 
     PageInfo<Comment> getCommentsByMovieId(String movieId, Integer size, Integer page, String orderBy);
+
+    void addComment(Comment comment) throws Exception;
+
+    PageInfo<Comment> getCommentsByUserId(Integer userId, Integer page, Integer size, String orderBy);
 }

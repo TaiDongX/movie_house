@@ -3731,6 +3731,7 @@ a:hover {
 }
 p {
   margin-bottom: 10px;
+  margin-right: 30px;
 }
 b,
 strong {
@@ -4070,8 +4071,11 @@ ul {
   flex-direction: column;
   flex-wrap: wrap;
 }
+
 .movie-items .movie-item {
   position: relative;
+  width: 160px;
+  height: 247px;
   margin-right: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -4083,8 +4087,10 @@ ul {
     margin-right: 0px;
   }
 }
-.movie-items .movie-item .mv-img {
+.movie-items .movie-item #movieHost {
   position: relative;
+  width: 275px;
+  height: 413px;
 }
 .movie-items .movie-item .mv-img:after {
   box-shadow: inset -5px -50px 100px -15px #000000;
@@ -7063,9 +7069,11 @@ p.ceb-single {
 }
 .slider .movie-item {
   margin-right: 15px;
+  width: 300px;
+  height: 467px;
 }
 .slider .movie-item .title-in {
-  margin-bottom: 45px;
+  margin-bottom: 85px;
 }
 .slider .movie-item .title-in h6 a {
   font-size: 18px;

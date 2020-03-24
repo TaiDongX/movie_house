@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class RfcConfig
-{
+public class RfcConfig {
     @Bean
     public TomcatServletWebServerFactory webServerFactory() {
         TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();

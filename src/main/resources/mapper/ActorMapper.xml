@@ -340,12 +340,13 @@
     <select id="getActorsFamous" resultMap="BaseResultMap">
     SELECT a.* FROM actor a
     INNER  JOIN movie_actor m USING(actor_id)
+    where a.status != -1
     group by(m.actor_id) order by(count(m.movie_id)) desc LIMIT 6
     </select>
     <select id="getActorsByMovieId" resultMap="BaseResultMap">
         select * from actor where actor_id in (
             select actor_id from movie_actor where movie_id = #{movieId}
-        ) limit 5
+        ) and status != -1 limit 5
     </select>
     <select id="getActorsByPage" resultMap="BaseResultMap">
         select * from actor
@@ -363,5 +364,6 @@
                 AND birthday &lt;= #{vo.maxBir,jdbcType=DATE}
             </if>
         </where>
+        and status != -1
     </select>
 </mapper>

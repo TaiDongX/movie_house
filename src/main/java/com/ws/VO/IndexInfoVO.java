@@ -3,6 +3,7 @@ package com.ws.VO;
 import com.ws.bean.Actor;
 import com.ws.bean.Movie;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @date: 2020.03.13 16:13
  * @since JDK 1.8
  */
-public class IndexInfoVO {
+public class IndexInfoVO implements Serializable {
 
 
     public List<Movie> popular1;

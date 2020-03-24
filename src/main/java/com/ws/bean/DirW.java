@@ -1,8 +1,9 @@
 package com.ws.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DirW {
+public class DirW implements Serializable {
     private String dId;
 
     private String name;

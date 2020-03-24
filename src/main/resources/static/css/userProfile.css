@@ -1,0 +1,70 @@
+#submit{
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #dd003f;
+}
+#submit:hover{
+    color: black;
+}
+#inputFile{
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    border: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+#choose{
+    position: relative;
+    left: 200px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#inputFile + #choose {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: white;
+    background-color: #dd003f;
+    display: inline-block;
+}
+#inputFile :focus + #choose,
+#inputFile + #choose:hover {
+    background-color:  red;
+}
+#inputFile:focus + #choose {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+#fileImg{
+    position: relative;
+    display: none;
+    left: 50px;
+    top: 10px;
+    width: 200px;
+    height: 284px;
+}
+.headerImg{
+    width: 100px;
+    height: 100px;
+    border: 0;
+    border-radius: 50px;
+}

@@ -1,8 +1,5 @@
 package com.ws.bean;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 public class Comment {
@@ -16,13 +13,13 @@ public class Comment {
 
     private Integer userId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JSONField(format="yyyy-MM-dd")
     private Date date;
 
     private Date createTime;
 
     private Date updateTime;
+
+    private Movie movie;
 
     public Integer getCommentId() {
         return commentId;
@@ -86,5 +83,28 @@ public class Comment {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "commentId=" + commentId +
+                ", comments='" + comments + '\'' +
+                ", rate=" + rate +
+                ", movieId='" + movieId + '\'' +
+                ", userId=" + userId +
+                ", date=" + date +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", movie=" + movie +
+                '}';
     }
 }

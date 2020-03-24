@@ -258,4 +258,5 @@
   <select id="getCommentsByMovieId" resultMap="BaseResultMap">
     select * from comment where movie_id = #{movieId}
   </select>
+
 </mapper>

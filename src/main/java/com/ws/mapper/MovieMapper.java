@@ -42,4 +42,6 @@ public interface MovieMapper {
     List<Movie> getMoviesByPage(@Param("vo") QueryMoviesVO vo);
 
     List<Movie> getMovieByActorId(String actorId);
+
+    List<Movie> getMovieByUserId(Integer userId);
 }

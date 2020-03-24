@@ -1,9 +1,10 @@
 package com.ws.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Serializable {
     private String movieId;
 
     private String name;

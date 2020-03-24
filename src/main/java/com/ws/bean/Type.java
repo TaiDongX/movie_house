@@ -1,8 +1,9 @@
 package com.ws.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Type {
+public class Type implements Serializable {
     private Integer typeId;
 
     private String typeName;

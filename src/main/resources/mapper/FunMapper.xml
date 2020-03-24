@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ws.mapper.FunMapper">
+  <resultMap id="BaseResultMap" type="com.ws.bean.Fun">
+    <id column="fun_id" jdbcType="INTEGER" property="funId" />
+    <result column="fun_name" jdbcType="VARCHAR" property="funName" />
+    <result column="parent_fun_id" jdbcType="INTEGER" property="parentFunId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fun_id, fun_name, parent_fun_id, status, description, url
+  </sql>
+  <select id="selectByExample" parameterType="com.ws.bean.FunExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from fun
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from fun
+    where fun_id = #{funId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from fun
+    where fun_id = #{funId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ws.bean.FunExample">
+    delete from fun
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ws.bean.Fun">
+    insert into fun (fun_id, fun_name, parent_fun_id, 
+      status, description, url
+      )
+    values (#{funId,jdbcType=INTEGER}, #{funName,jdbcType=VARCHAR}, #{parentFunId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ws.bean.Fun">
+    insert into fun
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="funId != null">
+        fun_id,
+      </if>
+      <if test="funName != null">
+        fun_name,
+      </if>
+      <if test="parentFunId != null">
+        parent_fun_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="funId != null">
+        #{funId,jdbcType=INTEGER},
+      </if>
+      <if test="funName != null">
+        #{funName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentFunId != null">
+        #{parentFunId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ws.bean.FunExample" resultType="java.lang.Long">
+    select count(*) from fun
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update fun
+    <set>
+      <if test="record.funId != null">
+        fun_id = #{record.funId,jdbcType=INTEGER},
+      </if>
+      <if test="record.funName != null">
+        fun_name = #{record.funName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentFunId != null">
+        parent_fun_id = #{record.parentFunId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update fun
+    set fun_id = #{record.funId,jdbcType=INTEGER},
+      fun_name = #{record.funName,jdbcType=VARCHAR},
+      parent_fun_id = #{record.parentFunId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      description = #{record.description,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ws.bean.Fun">
+    update fun
+    <set>
+      <if test="funName != null">
+        fun_name = #{funName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentFunId != null">
+        parent_fun_id = #{parentFunId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fun_id = #{funId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ws.bean.Fun">
+    update fun
+    set fun_name = #{funName,jdbcType=VARCHAR},
+      parent_fun_id = #{parentFunId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where fun_id = #{funId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,21 @@
+.review-div{
+    display: none;
+    overflow:hidden;
+    height:280px;
+}
+.review-div,.modal-dialog,.modal-content,.modal-body{
+    border-radius: 5px;
+    background-color: #020D18;
+    width: 98%;
+
+}
+#comInfo{
+    background-color: #233A50;
+    color: white;
+}
+.bottom{
+    padding: 15px;
+    text-align: right;
+}
+
+

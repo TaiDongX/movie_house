@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ws.VO.QueryCeleVO;
 import com.ws.bean.Actor;
+import com.ws.bean.ActorExample;
 import com.ws.bean.Movie;
 import com.ws.mapper.ActorMapper;
 import com.ws.service.ActorService;
@@ -25,6 +26,9 @@ public class ActorServiceImpl implements ActorService {
     @Autowired
     ActorMapper actorMapper;
 
+    @Autowired
+    ActorExample actorExample;
+
     @Override
     public List<Actor> getActorsFamous() {
         return actorMapper.getActorsFamous();
@@ -43,7 +47,15 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor getActorsById(String id) {
-        return actorMapper.selectByPrimaryKey(id);
+        ActorExample.Criteria criteria = actorExample.createCriteria();
+        criteria.andStatusNotEqualTo(-1);
+        criteria.andActorIdEqualTo(id);
+        List<Actor> list = actorMapper.selectByExample(actorExample);
+        actorExample.clear();
+        if(list.size() != 0){
+            return list.get(0);
+        }
+        return null;
     }
 
 

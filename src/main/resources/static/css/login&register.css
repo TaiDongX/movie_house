@@ -1,0 +1,16 @@
+#authCodemsg{
+    width:110px;
+    height:40px;
+    font-family: 'Dosis', sans-serif;
+    test-align:center;
+    font-weight:bold;
+    font-size:14px;
+    color: #7CB5EC;
+    position:relative;
+    top:-33px;
+    left:250px;
+    cursor: pointer;
+}
+#phoneNum{
+    width: 360px;
+}

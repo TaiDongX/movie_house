@@ -1,8 +1,9 @@
 package com.ws.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Actor {
+public class Actor implements Serializable {
     private String actorId;
 
     private String name;

@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.ws.VO.QueryMoviesVO;
 import com.ws.bean.Movie;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,4 +35,8 @@ public interface MovieService {
     PageInfo<Movie> getMoviesByPage(QueryMoviesVO vo);
 
     List<Movie> getMovieByActorId(String actorId);
+
+    PageInfo<Movie> getMovieByUserId(Integer userId,Integer page,Integer size,String orderBy);
+
+    void updateRate(String movieId, Float rate) throws Exception;
 }
