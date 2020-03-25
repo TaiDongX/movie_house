@@ -288,4 +288,13 @@
       keep = #{keep,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
+  <select id="getMovieCollectById" resultType="java.lang.Integer">
+    select count(0) from user_collect where movie_id=#{movieId} and user_id = #{userId}
+  </select>
+  <insert id="addCollect">
+    insert into user_collect (user_id, movie_id) values (#{userId},#{movieId})
+  </insert>
+  <insert id="cancelCollect">
+    delete from user_collect where movie_id =#{movieId} and user_id = #{userId}
+  </insert>
 </mapper>

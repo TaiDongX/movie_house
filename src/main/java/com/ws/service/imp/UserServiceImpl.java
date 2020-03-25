@@ -49,4 +49,20 @@ public class UserServiceImpl implements UserService {
         userMapper.updateByExample(user,userExample);
         userExample.clear();
     }
+
+    @Override
+    public int getMovieCollect(String movieId, String userId) {
+        return userMapper.getMovieCollectById(movieId,userId);
+    }
+
+    @Transactional
+    @Override
+    public void addCollect(String userId, String movieId) {
+        userMapper.addCollect(userId,movieId);
+    }
+
+    @Override
+    public void cancelCollect(String userId, String movieId) {
+        userMapper.cancelCollect(userId, movieId);
+    }
 }

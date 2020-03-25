@@ -10,9 +10,8 @@ import com.ws.bean.User;
 import com.ws.service.MovieService;
 import com.ws.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
  * @date: 2020.03.20 16:40
  * @since JDK 1.8
  */
-@RestController
+@Controller
 @RequestMapping("user")
 public class UserController {
 
@@ -44,11 +43,13 @@ public class UserController {
     MovieService movieService;
 
     @RequestMapping("userNameIsExist")
+    @ResponseBody
     public boolean userNameIsExist(String loginName) {
         return userService.findUserByLoginName(loginName) != null;
     }
 
     @RequestMapping("login")
+    @ResponseBody
     public String login(HttpServletResponse resp, HttpServletRequest req,
                         String loginName, String passWord, boolean remember) {
         // 根据用户名获取信息
@@ -84,7 +85,15 @@ public class UserController {
     }
 
     @RequestMapping("register")
-    public String register(User user, String code) {
+    @ResponseBody
+    public String register(HttpServletRequest req,User user, String code) {
+        Integer myCode = (Integer) req.getSession().getAttribute("code");
+        if(myCode == null ){
+            return "验证码已失效，请重新获取";
+        }
+        if(myCode != Integer.parseInt(code)){
+            return "验证码错误";
+        }
         try {
             user.setUserName(user.getLoginName());
             userService.insertUser(user);
@@ -97,6 +106,7 @@ public class UserController {
     }
 
     @RequestMapping("userExit")
+    @ResponseBody
     public String userExit(HttpServletRequest req) {
 
         req.getSession().removeAttribute("user");
@@ -109,6 +119,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("toUserCenter")
+    @ResponseBody
     public ModelAndView toUserCenter(HttpServletRequest req) {
         ModelAndView m = new ModelAndView();
         m.setViewName("userfavoritelist");
@@ -123,6 +134,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("checkUser")
+    @ResponseBody
     public User checkUser(HttpServletRequest req, String loginName) {
 
         User user = new User();
@@ -157,8 +169,10 @@ public class UserController {
      * @param phoneNum
      * @return
      */
-    @RequestMapping("getCode")
-    public String getCode(HttpServletRequest req, String phoneNum) {
+
+    @ResponseBody
+    @RequestMapping("sendAuthCode")
+    public void sendAuthCode(HttpServletRequest req, String phoneNum) {
         // 使用随机函数生成一个六位的验证码
         Random rand = new Random();
         int code = rand.nextInt(899999) + 100000;
@@ -167,12 +181,14 @@ public class UserController {
             AliyunSMSUtil.sendSms(phoneNum, "" + code);
             // 将生成的验证码保存到session中
             req.getSession().setAttribute("code", code);
+            // todo 设置有效时长为五分钟
             System.out.println("code" + code);
-        } catch (ClientException e) {
-            e.printStackTrace();
-            return "false";
         }
-        return "true";
+        catch (ClientException e) {
+            e.printStackTrace();
+
+        }
+
     }
 
     /**
@@ -184,6 +200,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("getMoviesFavorite")
+    @ResponseBody
     public PageInfo<Movie> getMoviesFavorite(HttpServletRequest req, Integer page, Integer size, String orderBy) {
         User user = (User) req.getSession().getAttribute("user");
         return movieService.getMovieByUserId(user.getUserId(), page, size, orderBy);
@@ -195,6 +212,7 @@ public class UserController {
      * @param file
      */
     @RequestMapping("changeHeader")
+    @ResponseBody
     public String changeHeader(@RequestParam(value = "file") MultipartFile file, HttpServletRequest req) {
         if (file.isEmpty()) {
             return "文件不能为空";
@@ -227,6 +245,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("toProfile")
+    @ResponseBody
     public ModelAndView toProfile(){
         ModelAndView m = new ModelAndView();
         m.setViewName("userprofile");
@@ -238,6 +257,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("toUserRate")
+    @ResponseBody
     public ModelAndView toUserRate(){
         ModelAndView m = new ModelAndView();
         m.setViewName("userrate");
@@ -246,15 +266,29 @@ public class UserController {
 
 
     @RequestMapping("changePWD")
-    public String changePWD(HttpServletRequest req,@RequestParam("pwd") String oldPwd,@RequestParam("newPwd") String newPwd){
+    public String changePWD(HttpServletRequest req,HttpServletResponse resp,@RequestParam(value = "newPwd")String newPwd){
+        System.out.println("newPwd = " + newPwd);
         User user = (User) req.getSession().getAttribute("user");
-
-        if(!user.getPassword().equals(oldPwd)){
-            return "旧密码错误";
-        }
         user.setPassword(newPwd);
         userService.updateUser(user);
-        return "修改成功!";
+        resp.addCookie(new Cookie(user.getLoginName(), null));
+        resp.addCookie(new Cookie("userName", null));
+
+        req.getSession().removeAttribute("user");
+        return "redirect:/movie/getIndexMovies";
     }
+
+    @RequestMapping("changeProfile")
+    @ResponseBody
+    public String changeProfile(HttpServletRequest req,User user){
+        User myUser = (User)req.getSession().getAttribute("user");
+        myUser.setMobile(user.getMobile());
+        myUser.setUserName(user.getUserName());
+        myUser.setEmail(user.getEmail());
+        myUser.setKeep(user.getKeep());
+        userService.updateUser(myUser);
+        return "保存成功";
+    }
+
 
 }

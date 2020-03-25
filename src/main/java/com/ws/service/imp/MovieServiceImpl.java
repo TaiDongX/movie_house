@@ -235,5 +235,15 @@ public class MovieServiceImpl implements MovieService {
 
     }
 
+    @Override
+    public void updateCollectCount(String movieId, int i) {
+        Movie movie = movieMapper.selectByPrimaryKey(movieId);
+        movie.setCollectCount(movie.getCollectCount() + i);
+        MovieExample.Criteria criteria = movieExample.createCriteria();
+        criteria.andMovieIdEqualTo(movieId);
+        movieMapper.updateByExample(movie, movieExample);
+        movieExample.clear();
+    }
+
 
 }

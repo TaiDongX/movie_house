@@ -16,4 +16,9 @@ public interface UserService {
 
     void updateUser(User user);
 
+    int getMovieCollect(String movieId, String userId);
+
+    void addCollect(String userId, String movieId);
+
+    void cancelCollect(String userId, String movieId);
 }

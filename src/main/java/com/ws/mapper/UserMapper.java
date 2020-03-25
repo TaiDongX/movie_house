@@ -27,4 +27,10 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    int getMovieCollectById(@Param("movieId")String movieId, @Param("userId")String userId);
+
+    void addCollect(@Param("userId")String userId,@Param("movieId")String movieId);
+
+    void cancelCollect(@Param("userId")String userId,@Param("movieId")String movieId);
 }

@@ -39,7 +39,7 @@
 			getCommentsById();
 			getDirWsById();
 			getRelatedMovies();
-
+			checkCollect();
 			$("#areviews").click(function() {
 				$("#overview").hide();
 				$("#reviews").show();
@@ -218,6 +218,54 @@
 				}
 
 			})
+		}
+		function checkCollect(){
+			var userId = $("#userId").val();
+			var movieId =$("#movieId").val();
+			var data ="userId="+userId+"&movieId="+movieId;
+			$.ajax({
+				type : "GET",
+				url : "/movie/checkCollect",
+				data : data,
+				dataType: 'json',
+				success : function(msg) {
+					if(!msg){
+						$("#userCollectText").html("添加到收藏夹");
+					}
+					else{
+						$("#userCollectText").html("取消收藏");
+					}
+				}
+			});
+		}
+		function addCollect(){
+			var userId = $("#userId").val();
+			var movieId =$("#movieId").val();
+			if(userId === ""){
+				$("#login-content").parents($(".overlay")).addClass("openform");
+				$(document).on('click', function(e){
+					var target = $(e.target);
+					if ($(target).hasClass("overlay")){
+						$(target).find( $("#login-content")).each( function(){
+							$(this).removeClass("openform");
+						});
+						setTimeout( function(){
+							$(target).removeClass("openform");
+						}, 350);
+					}
+				});
+				return;
+			}
+			var data ="userId="+userId+"&movieId="+movieId;
+			$.ajax({
+				type : "GET",
+				url : "/movie/addCollect",
+				data : data,
+				success : function (msg) {
+					alert(msg);
+					window.location.reload();
+				}
+			});
 		}
 	</script>
 </head>
@@ -428,16 +476,8 @@
 					<h1 class="bd-hd" th:utext="${movie.name}"></h1>
 					<input type="hidden" id="userId" th:value="${session.user == null ? '' : session.user.userId}">
 					<div class="social-btn">
-						<a href="#" class="parent-btn"><i class="ion-heart"></i> 添加收藏</a>
-						<div class="hover-bnt">
-							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>分享</a>
-							<div class="hvr-item">
-								<a href="#" class="hvr-grow"><i class="ion-social-facebook"></i></a>
-								<a href="#" class="hvr-grow"><i class="ion-social-twitter"></i></a>
-								<a href="#" class="hvr-grow"><i class="ion-social-googleplus"></i></a>
-								<a href="#" class="hvr-grow"><i class="ion-social-youtube"></i></a>
-							</div>
-						</div>		
+						<a href="JavaScript:void(0)" id="addCollect" class="parent-btn" onclick="addCollect()"><i
+								class="ion-heart"></i><span id="userCollectText">添加到收藏夹</span></a>
 					</div>
 					<div class="movie-rate">
 						<div class="rate">

@@ -11,6 +11,7 @@ import com.ws.mapper.MovieMapper;
 import com.ws.service.ActorService;
 import com.ws.service.DirWService;
 import com.ws.service.MovieService;
+import com.ws.service.UserService;
 import jdk.nashorn.internal.ir.LiteralNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,6 +38,9 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ActorService actorService;
@@ -175,6 +179,32 @@ public class MovieController {
     @RequestMapping("isPublish")
     public boolean isPublish(String movieId){
         return movieService.getMovieById(movieId).getReleaseDate().after(new Date());
+    }
+
+    /**
+     * 验证该电影是否已经被用户收藏
+     * @param movieId
+     * @param userId
+     * @return
+     */
+    @RequestMapping("checkCollect")
+    public boolean checkCollect(String movieId,String userId){
+        return  userService.getMovieCollect(movieId,userId) > 0;
+    }
+
+    @RequestMapping("addCollect")
+    public String addCollect(String movieId,String userId){
+        if(userService.getMovieCollect(movieId,userId) > 0){
+            userService.cancelCollect(userId,movieId);
+            movieService.updateCollectCount(movieId,-1);
+            return "已取消收藏";
+        }
+        else{
+            userService.addCollect(userId,movieId);
+            movieService.updateCollectCount(movieId,1);
+            return "收藏成功";
+        }
+
     }
 
 }

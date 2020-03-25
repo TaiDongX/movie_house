@@ -31,11 +31,59 @@
 	<script src="/static/js/login&register.js"></script>
 	<script src="/static/js/jquery.js"></script>
 	<script src="/static/js/userProfile.js"></script>
-	<script type="text/javascript">
+	<script type="text/javascript" th:inline="javascript">
 		function changePwd() {
 			var pwd = $("#pwd").val();
 			var newPwd = $("#newPwd").val();
 			var newPwd2 = $("#newPwd2").val();
+			if(pwd === ''){
+				alert("旧密码不能为空");
+				return false;
+			}
+			if(pwd !== [[${session.user.password}]]){
+				alert("旧密码错误");
+				return false;
+			}
+			if(newPwd === [[${session.user.password}]]){
+				alert("新密码不能与旧密码相同");
+				return false;
+			}
+			var reg1=/^[a-zA-Z]\w{5,17}$/;
+			if(!reg1.test(newPwd)){
+				alert("密码格式不正确");
+				return false;
+			}
+			if(newPwd !== newPwd2){
+				alert("两次新密码不相同");
+				return false;
+			}
+			alert(true);
+			return true;
+		}
+
+		function saveProfile(){
+			var email = $('#email').val();
+			var reg1 = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+			if(!reg1.test(email)){
+				alert("邮箱格式不正确，请重试");
+				return;
+			}
+			var reg2 =  /^1[3456789]\d{9}$/;
+			var mobile = $("#mobile").val();
+			if(!reg2.test(mobile)){
+				alert("手机号不存在");
+				return;
+			}
+			var formData = $('#userInfo').serialize();
+
+			$.ajax({
+				type: "get",
+				url: "/user/changeProfile",
+				data: formData,
+				success: function (msg) {
+					alert(msg);
+				}
+			});
 		}
 	</script>
 </head>
@@ -246,52 +294,52 @@
 			</div>
 			<div class="col-md-9 col-sm-12 col-xs-12">
 				<div class="form-style-1 user-pro" action="">
-					<form action="" class="user">
+					<form action="" class="user" id="userInfo">
 						<h4>01. 用户信息</h4>
 						<div class="row">
 							<div class="col-md-6 form-it">
 								<label>用户名 ：</label>
-								<input type="text" th:value="${session.user.userName == null ? '' : session.user.userName}">
+								<input type="text" name="userName" th:value="${session.user.userName == null ? '' : session.user.userName}">
 							</div>
 							<div class="col-md-6 form-it">
 								<label>Email ：</label>
-								<input type="text" th:value="${session.user.email == null ? '' : session.user.email}">
+								<input type="text" id="email" name="email" th:value="${session.user.email == null ? '' : session.user.email}">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6 form-it">
 								<label>电话 ：</label>
-								<input type="text" th:value="${session.user.mobile == null ? '' : session.user.mobile}">
+								<input type="text" id="mobile" name="mobile" th:value="${session.user.mobile == null ? '' : session.user.mobile}">
 							</div>
 							<div class="col-md-6 form-it">
-								<label>登录次数</label>
-								<input type="text" th:value="${session.user.loginCount == null ? '' : session.user.loginCount}">
+								<label>个性签名</label>
+								<input type="text" name="keep"  th:value="${session.user.keep == null ? '这个人很懒，什么都没有留下' : session.user.keep}">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-2">
-								<input class="submit" type="button" value="保存">
+								<input class="submit" type="button" onclick="saveProfile()" value="保存">
 							</div>
 						</div>	
 					</form>
-					<form action="" class="password" onsubmit="return changePwd()">
+					<form action="/user/changePWD" class="password" onsubmit="return changePwd()" method="post">
 						<h4>02. 修改密码</h4>
 						<div class="row">
 							<div class="col-md-6 form-it">
 								<label for="pwd">旧密码</label>
-								<input id="pwd" type="text" placeholder="**********">
+								<input id="pwd" type="password" placeholder="**********">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6 form-it">
 								<label for="newPwd">新密码</label>
-								<input id="newPwd" type="text" placeholder="***************">
+								<input id="newPwd" name="newPwd" type="password" placeholder="***************">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6 form-it">
 								<label for="newPwd2">确认密码</label>
-								<input id="newPwd2" type="text" placeholder="*************** ">
+								<input id="newPwd2" type="password" placeholder="*************** ">
 							</div>
 						</div>
 						<div class="row">

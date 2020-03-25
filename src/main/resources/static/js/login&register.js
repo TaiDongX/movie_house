@@ -102,6 +102,32 @@ $(function() {
             repOk = true;
         }
     });
+    var i = 60;
+    $("#authCodemsg").click(function(){
+        if(i===60){
+            var phoneNum = $("#phoneNum").val();
+            var reg = /^1[3-9]\d{9}$/;
+            if(reg.test(phoneNum)){
+                $.ajax({
+                    type : "GET",
+                    url : "/user/sendAuthCode",
+                    data :"phoneNum="+phoneNum
+                });
+                var A =setInterval(function(){
+                    $("#authCodemsg").css("color","gray").html(i+"s后重试");
+                    i--;
+                    if(i===0){
+                        i=60;
+                        clearInterval(A);
+                        $("#authCodemsg").css("color","#2A00FF").html("获取验证码");
+                    }
+                },1000);
+            }
+            else{
+                alert("电话号码不存在！");
+            }
+        }
+    })
     $("#code").blur(function(){
         var code =$("#code").val();
         if(code !== ""){

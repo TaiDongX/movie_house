@@ -39,4 +39,6 @@ public interface MovieService {
     PageInfo<Movie> getMovieByUserId(Integer userId,Integer page,Integer size,String orderBy);
 
     void updateRate(String movieId, Float rate) throws Exception;
+
+    void updateCollectCount(String movieId, int i);
 }
