@@ -53,7 +53,6 @@
                 s+='&movieId='+$("#movieId").val();
                 s+='&userId='+$("#userId").val();
                 s+='&rate='+$("#stars").val();
-                alert(s);
                 $.ajax({
                     type : "POST",
                     url : "/comment/addComment",
@@ -237,7 +236,7 @@
             <input type="hidden" id="stars" value="" />
         </div>
         <div class="form-group">
-            <label for="comInfo">分享你的看法：</label>
+            <label for="comInfo">分享你的看法</label>
             <textarea class="form-control" id="comInfo" name="comInfo" rows="6"></textarea>
         </div>
         <button type="button"  id="button">发表评论</button>

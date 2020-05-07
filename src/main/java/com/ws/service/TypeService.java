@@ -13,4 +13,6 @@ import java.util.List;
 public interface TypeService {
 
     List<Type> findAll();
+
+    Integer getTypeColls(Integer typeId);
 }

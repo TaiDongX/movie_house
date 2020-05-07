@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+</head>
+<style>
+    #LogTable td{
+        width:30%;
+        text-align: center;
+    }
+    #LogTable th{
+        width:30%;
+        text-align: center;
+        background-color: #C9C9C9;
+    }
+</style>
+<script type="text/javascript">
+    $(function(){
+        loadData(1);
+    });
+
+    function loadData(page){
+       var vo ={
+           "startTime" : $("#startTime").val(),
+           "endTime":$("#endTime").val(),
+           "page" : page
+       };
+        $.ajax({
+            type:"POST",
+            url:"/Log/getAdminLog",
+            data:JSON.stringify(vo),
+            dataType:"json",
+            contentType: "application/json",
+            success:function(pageInfo){
+                var list=pageInfo.list;
+                var str="";
+                for(var i=0;i<list.length;i++){
+                    var lo=list[i];
+                    var time = formatDate(lo.creatTime);
+                    str+='<tr>'+
+                        '<td>'+lo.admin.name+'</td>'+
+                        '<td>'+lo.opContent+'</td>'+
+                        '<td>'+time+'</td>'+
+                        '</tr>';
+                }
+                $("#tbody").html(str);
+                //局部刷新分页信息
+                var countPage=pageInfo.pages;
+                var countSize=pageInfo.total;
+                var page=pageInfo.pageNum;
+                var info='<span class="layui-word-aux">当前共有'+countSize+'条</span>'+
+                    '<span class="layui-word-aux">总共'+countPage+'页</span>'+
+                    '<span class="layui-word-aux">当前是第'+page+'页</span>'+
+                    '<input id="page" name="page" value="'+page+'" type="hidden"/>'+
+                    '<a class="layui-btn layui-btn-normal" href="javascript:void(0)" onclick="changePage('+(page-1)+')" >上一页</a>'+
+                    '<a class="layui-btn layui-btn-normal" href="javascript:void(0)" onclick="changePage('+(page+1)+')">下一页</a>';
+                $("#pages").html(info);
+            }
+        });
+    }
+</script>
+<body>
+<div class="cBody">
+    <form class="layui-form" style="padding-left:40px" id="myform">
+        <div class="layui-form-item">
+            <div class="layui-input-inline" style="text-align: center;width:40px;">
+                起始日期
+            </div>
+            <div class="layui-input-inline">
+                <input type="date" name="startTime" id="startTime" class="layui-input">
+            </div>
+            <div class="layui-input-inline" style="text-align: center;width:40px;">
+                结束日期
+            </div>
+            <div class="layui-input-inline">
+                <input type="date" name="endTime" id="endTime" class="layui-input">
+            </div>
+            <button class="layui-btn" type="button" onclick="changePage(1)">搜索</button>
+        </div>
+        <table class="layui-table" id="LogTable">
+            <tr>
+                <th>用户名</th>
+                <th>操作</th>
+                <th>时间</th>
+            </tr>
+            <tbody id="tbody">
+
+            </tbody>
+        </table>
+        <div id="pages" style="padding-left:250px"></div>
+    </form>
+    <script type="text/javascript">
+        function changePage(page){
+            $("#page").val(page);
+            loadData(page);
+        }
+    </script>
+</div>
+</body>
+</html>

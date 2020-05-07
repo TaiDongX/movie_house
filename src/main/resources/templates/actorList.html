@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="穷在闹市" />
+    <!-- 作者 -->
+    <meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+    <!-- 定义页面的最新版本 -->
+    <meta name="description" content="网站简介" />
+    <!-- 网站简介 -->
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>穷在闹市出品</title>
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script>
+    <!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <link type="text/css" href="/static/css/back/css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="/static/js/back/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/back/js/MyPage.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            changePage(1);
+        });
+
+        function fun1(v){
+            P.initMathod({
+                params: {elemId: '#pages',total:v,pageSize:'10'},
+                requestFunction: function () {
+                    console.log(JSON.stringify(P.config));
+                    var curr = P.config.pageIndex;
+                    var limit = P.config.pageSize;
+                    loadData(curr,limit);
+                }
+            });
+        }
+    </script>
+
+    <style>
+        .layui-table img {
+            max-width: none;
+        }
+        .layui-table th:nth-last-child(2),.layui-table td:nth-last-child(2){
+            width:400px;
+        }
+        #myTable th:nth-last-child(1),#myTable td:nth-last-child(1){
+            width:80px;
+        }
+    </style>
+
+
+</head>
+
+<body>
+<input type="hidden"  id="count" value="${requestScope.countSize}"/>
+<div class="cBody">
+    <form class="layui-form" action="" id="actorForm">
+        <div class="console">
+            <a class="layui-btn" href="/actor/toAddActor">添加演员</a>
+            <div class="layui-form-item">
+                <div class="layui-input-inline" style="text-align: center;width:60px;line-height:40px;">
+                    起始日期
+                </div>
+                <div class="layui-input-inline">
+                    <input type="date" name="minBir" id="minBir" class="layui-input">
+                </div>
+                <div class="layui-input-inline" style="text-align: center;width:60px;line-height:40px;">
+                    结束日期
+                </div>
+                <div class="layui-input-inline">
+                    <input type="date" name="maxBir" id="maxBir" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" name="actorsName" id="actorsName" required lay-verify="required" placeholder="输入演员名称" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-input-inline" style="text-align: center;width:40px;line-height:40px;">
+                    性别
+                </div>
+                <div class="layui-input-inline">
+                    <select name="sex" id="sex" lay-filter="provid">
+                        <option value="">---请选择性别---</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <button class="layui-btn" type="button" onclick="changePage(1)">检索</button>
+            </div>
+        </div>
+
+        <table class="layui-table" id="myTable">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>演员名称</th>
+                <th>演员生日</th>
+                <th>演员图片</th>
+                <th>演员籍贯</th>
+                <th>性别</th>
+                <th style="text-align:center;">简介</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </form>
+    <!-- layUI 分页模块 -->
+    <div id="pages" class="page" style="margin-top:50px;">
+    </div>
+    <script>
+        function loadData(curr,limit){
+            var vo = {
+                "name": $("#actorsName").val(),
+                "sex": $("#sex").val(),
+                "minBir": $("#minBir").val() === '' ? null : $("#minBir").val(),
+                "maxBir": $("#maxBir").val() === '' ? null : $("#maxBir").val(),
+                "page": curr,
+                "size": limit
+            };
+            $.ajax({
+                type: "POST",
+                url: "/cele/getCeleByPage",
+                data: JSON.stringify(vo),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(pageInfo){
+
+                    var list = pageInfo.list;
+                    var str= "";
+                    for (var i = 0; i < list.length; i++) {
+                        var a = list[i];
+                        var number = i+1;
+                        var actorName = a.name;
+                        if(typeof(actorName) == "undefined"){
+                            actorName = "未知";
+                        }
+                        var actorBir = a.birthday;
+                        if(typeof(actorBir) == "undefined"){
+                            actorBir = "未知";
+                        }
+                        var actorNat = a.homePlace;
+                        if(typeof(actorNat) == "undefined"){
+                            actorNat  = "未知";
+                        }
+                        var actorSex = a.sex;
+                        if(typeof(actorSex) == "undefined"){
+                            actorSex  = "未知";
+                        }
+                        var actorInfo = a.info;
+                        if(typeof(actorInfo) == "undefined" || actorInfo == null){
+                            actorInfo  = "未知";
+                        } else{
+                            if(actorInfo.length > 80){
+                                actorInfo = actorInfo.substring(0,80) + '...';
+                            }
+                        }
+                        str += '<tr>'+
+                            '<td>'+number+'</td>'+
+                            '<td>'+actorName+'</td>'+
+                            '<td>'+actorBir+'</td>'+
+                            '<td><img src="https://dfstest01.oss-cn-beijing.aliyuncs.com/img/actors/'+a.imgUrl+'.jpg" width="60" height="80" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>'+
+                            '<td>'+actorNat+'</td>'+
+                            '<td>'+actorSex+'</td>'+
+                            '<td>'+actorInfo+'</td>'+
+                            '<td>'+
+                            '<a class="layui-btn layui-btn-radius layui-btn-normal layui-btn layui-btn-xs" href="/actor/findActorById?actorId='+a.actorId+'"><i class="layui-icon">&#xe642;</i></a>'+
+                            '</td>';
+                    }
+                    $("#tbody").html(str);
+                    $("#pageC").val(pageInfo.countSize);
+                }
+            });
+        }
+        function changePage(page){
+            var vo = {
+                "name": $("#actorsName").val(),
+                "sex": $("#sex").val(),
+                "minBir": $("#minBir").val(),
+                "maxBir": $("#maxBir").val(),
+                "page": page,
+                "size": 10
+            };
+            $.ajax({
+                type: "POST",
+                url: "/cele/getCeleByPage",
+                data: JSON.stringify(vo),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(pageInfo){
+                    var a = $("#count").value;
+                    if(a == null || a === ""){
+                        a = pageInfo.countSize;
+                    }
+                    $("#count").val(a);
+                    fun1(a);
+                }
+            });
+        }
+
+        //修改规格
+        function specificationsBut(){
+            layui.use('layer', function() {
+                var layer = layui.layer;
+
+                //iframe层-父子操作
+                layer.open({
+                    type: 2,
+                    area: ['70%', '60%'],
+                    fixed: false, //不固定
+                    maxmin: true,
+                    content: 'specifications_list.html'
+                });
+            });
+
+        }
+        //修改按钮
+        var updateFrame = null;
+        function updateBut(){
+            layui.use('layer', function() {
+                var layer = layui.layer;
+
+                //iframe层-父子操作
+                updateFrame = layer.open({
+                    title: "商品信息修改",
+                    type: 2,
+                    area: ['70%', '60%'],
+                    scrollbar: false,	//默认：true,默认允许浏览器滚动，如果设定scrollbar: false，则屏蔽
+                    maxmin: true,
+                    content: 'goods_update.html'
+                });
+            });
+
+        }
+    </script>
+</div>
+</body>
+
+</html>

@@ -208,4 +208,15 @@
       op_content = #{opContent,jdbcType=VARCHAR}
     where log_id = #{logId,jdbcType=INTEGER}
   </update>
+  <select id="getLogByVO" resultMap="BaseResultMap">
+    select * from log
+    <where>
+      <if test="vo.startTime != null">
+        AND creat_time &gt;= #{vo.startTime,jdbcType=DATE}
+      </if>
+      <if test="vo.endTime != null">
+        AND creat_time &lt;= #{vo.endTime,jdbcType=DATE}
+      </if>
+    </where>
+  </select>
 </mapper>

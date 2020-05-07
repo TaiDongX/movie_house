@@ -6,6 +6,9 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="head_pic" jdbcType="VARCHAR" property="headPic" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
     <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
     <result column="email" jdbcType="VARCHAR" property="email" />
@@ -69,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    admin_id, name, login_name, password, login_time, login_ip, email
+    admin_id, name, login_name, password, head_pic, status, role_id, login_time, login_ip, 
+    email
   </sql>
   <select id="selectByExample" parameterType="com.ws.bean.AdminExample" resultMap="BaseResultMap">
     select
@@ -103,10 +107,12 @@
   </delete>
   <insert id="insert" parameterType="com.ws.bean.Admin">
     insert into admin (admin_id, name, login_name, 
-      password, login_time, login_ip, 
+      password, head_pic, status, 
+      role_id, login_time, login_ip, 
       email)
     values (#{adminId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{loginIp,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{headPic,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{roleId,jdbcType=INTEGER}, #{loginTime,jdbcType=TIMESTAMP}, #{loginIp,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ws.bean.Admin">
@@ -123,6 +129,15 @@
       </if>
       <if test="password != null">
         password,
+      </if>
+      <if test="headPic != null">
+        head_pic,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="roleId != null">
+        role_id,
       </if>
       <if test="loginTime != null">
         login_time,
@@ -146,6 +161,15 @@
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null">
+        #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
       </if>
       <if test="loginTime != null">
         #{loginTime,jdbcType=TIMESTAMP},
@@ -179,6 +203,15 @@
       <if test="record.password != null">
         password = #{record.password,jdbcType=VARCHAR},
       </if>
+      <if test="record.headPic != null">
+        head_pic = #{record.headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=INTEGER},
+      </if>
       <if test="record.loginTime != null">
         login_time = #{record.loginTime,jdbcType=TIMESTAMP},
       </if>
@@ -199,6 +232,9 @@
       name = #{record.name,jdbcType=VARCHAR},
       login_name = #{record.loginName,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
+      head_pic = #{record.headPic,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      role_id = #{record.roleId,jdbcType=INTEGER},
       login_time = #{record.loginTime,jdbcType=TIMESTAMP},
       login_ip = #{record.loginIp,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR}
@@ -218,6 +254,15 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
+      <if test="headPic != null">
+        head_pic = #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
       <if test="loginTime != null">
         login_time = #{loginTime,jdbcType=TIMESTAMP},
       </if>
@@ -235,6 +280,9 @@
     set name = #{name,jdbcType=VARCHAR},
       login_name = #{loginName,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
+      head_pic = #{headPic,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
       login_time = #{loginTime,jdbcType=TIMESTAMP},
       login_ip = #{loginIp,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR}

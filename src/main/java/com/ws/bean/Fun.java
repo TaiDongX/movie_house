@@ -1,6 +1,7 @@
 package com.ws.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Fun implements Serializable {
     private Integer funId;
@@ -9,11 +10,15 @@ public class Fun implements Serializable {
 
     private Integer parentFunId;
 
+    private String funTarger;
+
     private Integer status;
 
     private String description;
 
     private String url;
+
+    private List<Fun> subFuns;
 
     public Integer getFunId() {
         return funId;
@@ -39,6 +44,14 @@ public class Fun implements Serializable {
         this.parentFunId = parentFunId;
     }
 
+    public String getFunTarger() {
+        return funTarger;
+    }
+
+    public void setFunTarger(String funTarger) {
+        this.funTarger = funTarger == null ? null : funTarger.trim();
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -61,5 +74,13 @@ public class Fun implements Serializable {
 
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
+    }
+
+    public List<Fun> getSubFuns() {
+        return subFuns;
+    }
+
+    public void setSubFuns(List<Fun> subFuns) {
+        this.subFuns = subFuns;
     }
 }

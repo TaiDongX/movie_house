@@ -29,4 +29,6 @@ public interface CommentMapper {
     int updateByPrimaryKey(Comment record);
 
     List<Comment> getCommentsByMovieId(String movieId);
+
+    Integer getCountByType(Integer typeId);
 }

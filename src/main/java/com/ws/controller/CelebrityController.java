@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.stream.Collectors;
+
 /**
  * @author 王朔
  * Description:
@@ -34,7 +36,11 @@ public class CelebrityController {
     @RequestMapping("getCeleByPage")
     public PageInfo<Actor> getCeleByPage(@RequestBody QueryCeleVO vo){
         System.out.println(vo);
-        return actorService.getActorsByPage(vo);
+        PageInfo<Actor> pageInfo = actorService.getActorsByPage(vo);
+        pageInfo.setList(pageInfo.getList().stream().peek(a -> {
+            a.setImgUrl(a.getActorId().length() == 16 ? "default" : a.getActorId());
+        }).collect(Collectors.toList()));
+        return pageInfo;
     }
 
     @RequestMapping("getCeleById")

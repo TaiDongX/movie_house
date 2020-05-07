@@ -1,5 +1,6 @@
 package com.ws.service.imp;
 
+import com.github.pagehelper.PageHelper;
 import com.ws.bean.Type;
 import com.ws.mapper.TypeMapper;
 import com.ws.service.TypeService;
@@ -22,4 +23,10 @@ public class TypeServiceImpl  implements TypeService {
     public List<Type> findAll() {
         return typeMapper.selectByExample(null);
     }
+
+    @Override
+    public Integer getTypeColls(Integer typeId) {
+        return typeMapper.getTypeColls(typeId);
+    }
+
 }

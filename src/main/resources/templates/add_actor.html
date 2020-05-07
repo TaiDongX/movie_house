@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="穷在闹市" />
+    <!-- 作者 -->
+    <meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+    <!-- 定义页面的最新版本 -->
+    <meta name="description" content="网站简介" />
+    <!-- 网站简介 -->
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>添加演员</title>
+
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <style>
+        .layui-form-label{
+            width: 100px;
+        }
+        .layui-input-block{
+            margin-left: 130px;
+        }
+        .layui-form{
+            margin-right: 30%;
+        }
+        .err{
+            color:red;
+        }
+        .ok{
+            color:green;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+    var isok=false;
+    $(document).ready(function(){
+        $("#actorName").blur(function(){
+
+            //获取用户名
+            var name=$("#actorName").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/actor/findActorByName",
+                data: "name="+name,
+                dataType: "json",
+                success: function(msg){
+
+                    $("#msg").removeClass("ok").removeClass("error");
+                    if(!msg){
+                        //名称可用
+                        $("#msg").html("名称可用").addClass("ok");
+                        isok=true;
+                    } else{
+                        $("#msg").html("名称已存在").addClass("err");
+                        isok=false;
+                    }
+                }
+            });
+        })
+    });
+    layui.use('form', function() {
+        var form = layui.form;
+        //监听提交
+        form.on('submit(submitBut)', function() {
+
+            if(!isok){
+                layer.msg("添加失败！");
+                return false;
+            }
+            return true;
+
+        });
+    });
+
+</script>
+<div class="cBody">
+    <form action="/actor/addActor" id="addForm" class="layui-form" method="post" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">演员名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="actorName"  required lay-verify="required" autocomplete="off" class="layui-input">
+                <span id="msg"></span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-block">
+                <input type="date" name="birthday" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生地</label>
+            <div class="layui-input-block">
+                <input type="text" name="homePlace" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="info">演员简介</label>
+            <div class="layui-input-block">
+                <textarea rows="10" cols="87" required lay-verify="required" autocomplete="off" id="info" name="info" ></textarea>
+            </div>
+        </div>
+
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div id="actor1">
+                
+                </div>
+            </div>
+        </div> -->
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="男" title="男" checked="checked">
+                <input type="radio" name="sex" value="女" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="submit"  lay-submit lay-filter="submitBut">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+
+
+    <!-- <script>
+        layui.use(['upload','form'], function() {
+            var form = layui.form;
+            var upload = layui.upload;
+            var layer = layui.layer;
+            //监听提交
+            form.on('submit(submitBut)', function(data) {
+                return false;
+            });
+            form.verify({
+                //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+                  ZHCheck: [
+                    /^[\u0391-\uFFE5]+$/
+                    ,'只允许输入中文'
+                  ] 
+            });
+        });
+    </script> -->
+
+</div>
+</body>
+
+</html>

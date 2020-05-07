@@ -352,7 +352,7 @@
         select * from actor
         <where>
             <if test="vo.name != null and vo.name != ''">
-                and LOCATE(#{vo.name},`name`) > 0
+                and LOCATE(#{vo.name},`name`) > 0  OR LOCATE(#{vo.name},`alias`) > 0
             </if>
             <if test="vo.sex != null and vo.sex != ''">
                 and sex = #{vo.sex}
@@ -363,7 +363,10 @@
             <if test="vo.maxBir != null">
                 AND birthday &lt;= #{vo.maxBir,jdbcType=DATE}
             </if>
+            <if test="1==1">
+                and status != -1
+            </if>
         </where>
-        and status != -1
+
     </select>
 </mapper>

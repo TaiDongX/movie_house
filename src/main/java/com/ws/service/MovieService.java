@@ -3,6 +3,7 @@ package com.ws.service;
 import com.github.pagehelper.PageInfo;
 import com.ws.VO.QueryMoviesVO;
 import com.ws.bean.Movie;
+import com.ws.bean.Type;
 
 import java.util.List;
 
@@ -41,4 +42,12 @@ public interface MovieService {
     void updateRate(String movieId, Float rate) throws Exception;
 
     void updateCollectCount(String movieId, int i);
+
+    PageInfo<Movie> getMoviesByPageIgnoreStatus(QueryMoviesVO vo);
+
+    void changeMovieStatus(String movieId, Integer status);
+
+    void updateMovie(Movie m);
+
+    List<Integer> getMovieCountByType(List<Type> list);
 }

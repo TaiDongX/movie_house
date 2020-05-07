@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>Admin</title>
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <style>
+        .layui-table img {
+            max-width: none;
+        }
+    </style>
+
+
+</head>
+
+<body>
+<div class="cBody">
+    <div class="console">
+        <div class="layui-form-item">
+            <a href="/admin/toAddAdmin" class="layui-btn">添加管理员</a>
+        </div>
+
+    </div>
+
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>头像</th>
+            <th>用户名</th>
+            <th>昵称</th>
+            <th>状态</th>
+            <th>职务</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${aList.size() != 0}" th:each="admin : ${aList}">
+                <td>[[${adminStat.index }]]</td>
+                <td>
+                    <img th:src="'/static/img/others/morenHead.jpg'" width="60" height="80" th:if="${admin.headPic == null}"
+                         onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/>
+                    <img th:src="'/static/img/others/'+${admin.headPic}" width="60" height="80" th:if="${admin.headPic != null}"
+                         onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/>
+
+                </td>
+                <td>[[${admin.loginName}]]</td>
+                <td>[[${admin.name }]]</td>
+                <td th:if="${admin.status == 1 }">在职</td>
+                <td th:if="${admin.status == -1 }">离职</td>
+                <td th:if="${admin.status == 0 }">停薪留职</td>
+                <td th:text="${admin.role.roleName}"></td>
+                <td >
+                    <a th:href="'/admin/findAdminById?adminId='+${admin.adminId}" class="layui-btn layui-btn-xs">修改</a>
+                    <a th:href="'/admin/deleteAdmin?adminId='+${admin.adminId}" th:if="${admin.status == 1}"
+                       class="layui-btn-danger layui-btn layui-btn-xs">解雇</a>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>
+</body>
+
+</html>

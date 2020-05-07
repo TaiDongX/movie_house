@@ -27,4 +27,6 @@ public interface FunMapper {
     int updateByPrimaryKeySelective(Fun record);
 
     int updateByPrimaryKey(Fun record);
+
+    List<Fun> getFunListByRoleId(Integer roleId);
 }

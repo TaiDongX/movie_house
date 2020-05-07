@@ -55,6 +55,7 @@ public class CommentController {
     @RequestMapping("addComment")
     public String addComment(String info, String movieId, Integer userId, Float rate) {
         Comment comment = new Comment();
+        info = info.replace("马化腾", "***");
         comment.setComments(info);
         comment.setDate(new Date());
         comment.setMovieId(movieId);

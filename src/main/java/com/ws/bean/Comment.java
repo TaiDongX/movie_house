@@ -1,8 +1,9 @@
 package com.ws.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Comment {
+public class Comment implements Serializable {
     private Integer commentId;
 
     private String comments;

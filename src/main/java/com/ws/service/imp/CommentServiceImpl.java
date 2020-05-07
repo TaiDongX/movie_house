@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.ws.bean.Comment;
 import com.ws.bean.CommentExample;
 import com.ws.bean.MovieExample;
+import com.ws.bean.Type;
 import com.ws.mapper.CommentMapper;
 import com.ws.mapper.MovieMapper;
 import com.ws.service.CommentService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,5 +60,17 @@ public class CommentServiceImpl implements CommentService {
         commentExample.clear();
         pageInfo.setList(list);
         return pageInfo;
+    }
+
+    /**
+     * 获取每种类型的评论总数
+     * @param list
+     * @return
+     */
+    @Override
+    public List<Integer> getCountByType(List<Type> list) {
+        List<Integer> count = new ArrayList<>();
+        list.forEach(type -> count.add(commentMapper.getCountByType(type.getTypeId())));
+        return count;
     }
 }

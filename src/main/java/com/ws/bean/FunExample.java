@@ -296,6 +296,76 @@ public class FunExample {
             return (Criteria) this;
         }
 
+        public Criteria andFunTargerIsNull() {
+            addCriterion("fun_targer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerIsNotNull() {
+            addCriterion("fun_targer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerEqualTo(String value) {
+            addCriterion("fun_targer =", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerNotEqualTo(String value) {
+            addCriterion("fun_targer <>", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerGreaterThan(String value) {
+            addCriterion("fun_targer >", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerGreaterThanOrEqualTo(String value) {
+            addCriterion("fun_targer >=", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerLessThan(String value) {
+            addCriterion("fun_targer <", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerLessThanOrEqualTo(String value) {
+            addCriterion("fun_targer <=", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerLike(String value) {
+            addCriterion("fun_targer like", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerNotLike(String value) {
+            addCriterion("fun_targer not like", value, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerIn(List<String> values) {
+            addCriterion("fun_targer in", values, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerNotIn(List<String> values) {
+            addCriterion("fun_targer not in", values, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerBetween(String value1, String value2) {
+            addCriterion("fun_targer between", value1, value2, "funTarger");
+            return (Criteria) this;
+        }
+
+        public Criteria andFunTargerNotBetween(String value1, String value2) {
+            addCriterion("fun_targer not between", value1, value2, "funTarger");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

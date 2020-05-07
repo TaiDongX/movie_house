@@ -14,6 +14,8 @@ public class Log implements Serializable {
 
     private String opContent;
 
+    private Admin admin;
+
     public Integer getLogId() {
         return logId;
     }
@@ -52,5 +54,13 @@ public class Log implements Serializable {
 
     public void setOpContent(String opContent) {
         this.opContent = opContent == null ? null : opContent.trim();
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
 }

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="穷在闹市" />
+    <!-- 作者 -->
+    <meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+    <!-- 定义页面的最新版本 -->
+    <meta name="description" content="网站简介" />
+    <!-- 网站简介 -->
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>更新演员</title>
+
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <style>
+        .layui-form-label{
+            width: 100px;
+        }
+        .layui-input-block{
+            margin-left: 130px;
+        }
+        .layui-form{
+            margin-right: 30%;
+        }
+        .err{
+            color:red;
+        }
+        .ok{
+            color:green;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="cBody">
+    <form action="/view/updateAdmin"  class="layui-form" method="get" id="actorForm" enctype="multipart/form-data">
+        <input name="adminId" th:value="${admin.adminId}" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">登录名</label>
+            <div class="layui-input-block">
+                <input type="text" name="loginName" id="loginName" readonly="readonly" th:value="${admin.loginName}"   required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="petName"  th:value="${admin.name}"   required lay-verify="required" autocomplete="off" class="layui-input">
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="1" title="在职" >
+                <input type="radio" name="status" value="-1" title="停职" >
+                <input type="radio" name="status" value="0" title="停薪留职" >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">管理员角色</label>
+            <div class="layui-input-block">
+                <select name="roleId" id="role" class="form-control">
+                        <option checked="checked" th:each="r : ${application.roleList}" th:value="${r.roleId}" th:text="${r.roleName}" th:if="${admin.roleId == r.roleId}"></option>
+                        <option th:each="r : ${application.roleList}" th:value="${r.roleId}" th:text="${r.roleName}" th:if="${admin.roleId != r.roleId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" th:if="${admin.loginTime != null}">
+            <label class="layui-form-label">上次登录时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="loginTime" autocomplete="off" class="layui-input"  th:value="${#dates.format(admin.loginTime, 'yyyy-MM-dd hh:mm:ss')}" readonly="readonly">
+            </div>
+        </div>
+        <div class="layui-form-item" th:if="${admin.loginIp != null}">
+            <label class="layui-form-label">登录IP</label>
+            <div class="layui-input-block">
+                <input type="text" name="loginIp" autocomplete="off" class="layui-input"  th:value="${admin.loginIp}" readonly="readonly">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="submit"  lay-submit lay-filter="submitBut">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        $(document).ready(function(){
+            var status=[[${admin.status}]];
+            //alert(sex);
+            $("input[value='"+status+"']").trigger("click");
+        })
+    </script>
+
+
+</div>
+</body>
+
+</html>

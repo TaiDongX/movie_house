@@ -258,5 +258,10 @@
   <select id="getCommentsByMovieId" resultMap="BaseResultMap">
     select * from comment where movie_id = #{movieId}
   </select>
-
+  <select id="getCountByType" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT COUNT(c) FROM (
+    SELECT DISTINCT comment_id c FROM comment
+    LEFT JOIN movie_type ON comment.movie_id = movie_type.movie_id
+    WHERE movie_type.type_id = #{typeId}) m
+  </select>
 </mapper>

@@ -5,6 +5,7 @@
     <id column="fun_id" jdbcType="INTEGER" property="funId" />
     <result column="fun_name" jdbcType="VARCHAR" property="funName" />
     <result column="parent_fun_id" jdbcType="INTEGER" property="parentFunId" />
+    <result column="fun_targer" jdbcType="VARCHAR" property="funTarger" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    fun_id, fun_name, parent_fun_id, status, description, url
+    fun_id, fun_name, parent_fun_id, fun_targer, status, description, url
   </sql>
   <select id="selectByExample" parameterType="com.ws.bean.FunExample" resultMap="BaseResultMap">
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.ws.bean.Fun">
     insert into fun (fun_id, fun_name, parent_fun_id, 
-      status, description, url
-      )
+      fun_targer, status, description, 
+      url)
     values (#{funId,jdbcType=INTEGER}, #{funName,jdbcType=VARCHAR}, #{parentFunId,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}
-      )
+      #{funTarger,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ws.bean.Fun">
     insert into fun
@@ -119,6 +120,9 @@
       </if>
       <if test="parentFunId != null">
         parent_fun_id,
+      </if>
+      <if test="funTarger != null">
+        fun_targer,
       </if>
       <if test="status != null">
         status,
@@ -139,6 +143,9 @@
       </if>
       <if test="parentFunId != null">
         #{parentFunId,jdbcType=INTEGER},
+      </if>
+      <if test="funTarger != null">
+        #{funTarger,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -169,6 +176,9 @@
       <if test="record.parentFunId != null">
         parent_fun_id = #{record.parentFunId,jdbcType=INTEGER},
       </if>
+      <if test="record.funTarger != null">
+        fun_targer = #{record.funTarger,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -188,6 +198,7 @@
     set fun_id = #{record.funId,jdbcType=INTEGER},
       fun_name = #{record.funName,jdbcType=VARCHAR},
       parent_fun_id = #{record.parentFunId,jdbcType=INTEGER},
+      fun_targer = #{record.funTarger,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       description = #{record.description,jdbcType=VARCHAR},
       url = #{record.url,jdbcType=VARCHAR}
@@ -203,6 +214,9 @@
       </if>
       <if test="parentFunId != null">
         parent_fun_id = #{parentFunId,jdbcType=INTEGER},
+      </if>
+      <if test="funTarger != null">
+        fun_targer = #{funTarger,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -220,9 +234,15 @@
     update fun
     set fun_name = #{funName,jdbcType=VARCHAR},
       parent_fun_id = #{parentFunId,jdbcType=INTEGER},
+      fun_targer = #{funTarger,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR}
     where fun_id = #{funId,jdbcType=INTEGER}
   </update>
+  <select id="getFunListByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select * from fun where fun_id in (
+            select fun_id from role_fun where role_id = #{roleId}
+          )
+  </select>
 </mapper>

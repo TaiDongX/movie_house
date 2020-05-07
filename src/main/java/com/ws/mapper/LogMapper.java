@@ -1,5 +1,6 @@
 package com.ws.mapper;
 
+import com.ws.VO.QueryLogVO;
 import com.ws.bean.Log;
 import com.ws.bean.LogExample;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface LogMapper {
     int updateByPrimaryKeySelective(Log record);
 
     int updateByPrimaryKey(Log record);
+
+    List<Log> getLogByVO(@Param("vo") QueryLogVO vo);
 }

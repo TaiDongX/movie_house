@@ -198,4 +198,19 @@
         select type_id from movie_type where movie_id = #{movieId}
     )
   </select>
+
+  <insert id="updateMovieTypes" >
+        insert into movie_type (type_id,movie_id) value
+    <foreach collection="movie.typeList" item="ty"  separator=",">
+      (#{ty.typeId},#{movie.movieId})
+    </foreach>
+  </insert>
+  <delete id="deleteMovieTypes">
+    delete from movie_type where movie_id = #{movie.movieId}
+  </delete>
+  <select id="getTypeColls" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select sum(m.count) FROM (SELECT COUNT(*) AS COUNT FROM user_collect WHERE movie_id IN (
+      select movie_id from movie_type where type_id = #{typeId}
+    ) GROUP BY (movie_id)) m
+  </select>
 </mapper>

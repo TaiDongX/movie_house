@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>AllMovies</title>
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css"
+          href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css"
+          href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript"
+            src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="/static/layui/css/layui.css">
+    <script type="text/javascript"
+            src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css"
+          href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script
+            src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script
+            src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script
+            src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script
+            src="/static/js/back/framework/cframe.js"></script>
+    <!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <link type="text/css" href="/static/css/back/css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="/static/js/back/js/MyPage.js"></script>
+
+    <style>
+        .layui-table img {
+            max-width: none;
+        }
+
+        #movieTable th:nth-last-child(1), #myTable td:nth-last-child(1) {
+            width: 80px;
+        }
+        #movieTable th,#movieTable td{
+            text-align: center;
+            vertical-align: center;
+        }
+        input[type="date"].full:before {
+            color: black;
+            content: ""!important;
+        }
+
+        input[type="date"]{
+            direction: initial;
+        }
+        input[type="date"] :before {
+            color: #A9A9A9;
+            content: attr(placeholder);
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
+    </script>
+
+    <script type="text/javascript">
+        function initNum(page){
+            var vo = {
+                "name" : $("#movieName").val(),
+                "maxScore" : $("#maxScore").val() === '' ? 10 : $("#maxScore").val(),
+                "minScore": $("#minScore").val() === '' ? 0 : $("#minScore").val(),
+                "latedDate": $("#latedDate").val() === '' ? null : $("#latedDate").val(),
+                "earlyDate":$("#earlyDate").val() === '' ? null : $("#earlyDate").val(),
+                "page" : page,
+                "size" : 10,
+            };
+            var val = $("#types").val();
+            if(val !== '-1'){
+                vo.type = [val];
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/movie/getBackMovieList",
+                data:JSON.stringify(vo),
+                dataType:"json",
+                contentType: "application/json",
+                success: function(pageInfo){
+                    var c = $("#cSize").value;
+                    if(c == null || c === ""){
+                        $("#cSize").val(pageInfo.total);
+                    }
+                    fun1(pageInfo.total);
+                }
+            });
+        }
+        function fun1(v){
+            P.initMathod({
+                params: {elemId: '#pages',total:v,pageSize:'10'},
+                requestFunction: function () {
+                    console.log(JSON.stringify(P.config));
+                    var curr = P.config.pageIndex;
+                    var limit = P.config.pageSize;
+                    loadData(curr,limit);
+                }
+            });
+        }
+
+        function loadData(curr,limit) {
+            var vo = {
+                "name" : $("#movieName").val(),
+                "maxScore" : $("#maxScore").val() === '' ? 10 : $("#maxScore").val(),
+                "minScore": $("#minScore").val() === '' ? 0 : $("#minScore").val(),
+                "latedDate": $("#latedDate").val() === '' ? null : $("#latedDate").val(),
+                "earlyDate":$("#earlyDate").val() === '' ? null : $("#earlyDate").val(),
+                "page" : curr,
+                "size" : limit,
+            };
+            var val = $("#types").val();
+            if(val !== '-1'){
+                vo.type = [val];
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "/movie/getBackMovieList",
+                data: JSON.stringify(vo),
+                dataType:"json",
+                contentType: "application/json",
+                success: function(pageInfo){
+                    var list = pageInfo.list;
+                    var str = "";
+                    for (var i = 0; i < list.length; i++) {
+                        var m = list[i];
+                        var statu=m.status;
+                        var btn='<a class="layui-btn layui-btn-radius layui-btn-primary layui-btn layui-btn-xs" onclick="changeStatus('+m.movieId+','+m.status+')" title="上架" href="javaScript:void(0)" ><i class="layui-icon">&#xe654;</i> </a>';
+                        var changebtn='';
+                        if(statu !== -1){
+                            statu='上映';
+                            btn='<a class="layui-btn layui-btn-radius layui-btn-danger layui-btn layui-btn-xs" onclick="changeStatus('+m.movieId+','+m.status+')" title="下架" href="javaScript:void(0)"><i class="layui-icon">&#xe640;</i></a>';
+                            changebtn='<a class="layui-btn layui-btn-radius layui-btn-normal layui-btn layui-btn-xs" title="编辑" href="/movie/findMovieForUpdate?movieId='+m.movieId+'"><i class="layui-icon">&#xe642;</i></a>';
+                        } else {
+                            statu='下架';
+                        }
+
+                        str+='<tr>'
+                            +'<td>'+(i+1)+'</td>'
+                            +'<td><img src="https://dfstest01.oss-cn-beijing.aliyuncs.com/img/movies/'+m.movieId+'.jpg" width="60" height="80" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>'
+                            +'<td>'+m.name+'</td>'
+                            +'<td>'+formatDate(m.releaseDate)+'</td>'
+                            +'<td>'+m.collectCount+'</td>'
+                            +'<td>'+statu+'</td>'
+                            +'<td>'+m.rate+'</td>'
+                            +'<td>'
+                            +changebtn
+                            +btn
+                            +'</td>'
+                            +'</tr>';
+                    }
+                    $("#tbody").html(str);
+                    //局部刷新分页信息
+                    $("#cSize").val(pageInfo.total);
+                }
+            });
+        }
+
+        function changeStatus(movieId,status){
+            $.ajax({
+                type: "POST",
+                url: "/movie/changeMovieStatus",
+                data:"movieId="+movieId+"&status="+status,
+                success: function() {
+                    initNum(1);
+                }
+            });
+        }
+
+        $(function() {
+            initNum(1);
+
+            $("input[type='date']").on("input", function() {
+                if ($(this).val().length > 0) {
+                    $(this).addClass("full");
+                } else {
+                    $(this).removeClass("full");
+                }
+            });
+        })
+
+    </script>
+</head>
+
+<body>
+<div class="cBody">
+    <form class="layui-form" id="movieform">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" name="movieName" id="movieName" placeholder="输入电影名称"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <select name="types" id="types">
+                    <option value="-1">请选择类型</option>
+                    <option th:each=" type : ${application.typeList}" th:value="${type.typeId}" th:text="${type.typeName}"></option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" id="earlyDate" title="最早上映时间" type="date">
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input " id="latedDate"  title="最晚上映时间" type="date">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="minScore" id="minScore" class="layui-input"
+                       placeholder="输入最小评分">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="maxScore" id="maxScore" class="layui-input"
+                        placeholder="输入最大评分">
+            </div>
+            <button class="layui-btn" type="button" onclick=" initNum(1)">查询</button>
+        </div>
+
+        <table class="layui-table" id="movieTable">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>海报</th>
+                <th>电影名</th>
+                <th>上映时间</th>
+                <th>收藏数</th>
+                <th>状态</th>
+                <th>评分</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+        <div id="pages" class="page"></div>
+    </form>
+
+</div>
+</body>
+
+</html>

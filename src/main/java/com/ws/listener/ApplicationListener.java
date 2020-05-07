@@ -1,6 +1,7 @@
 package com.ws.listener;
 
 import com.ws.service.RegionService;
+import com.ws.service.RoleService;
 import com.ws.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +24,9 @@ public class ApplicationListener implements ServletContextListener {
     @Autowired
     RegionService regionService;
 
+    @Autowired
+    RoleService roleService;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext application = sce.getServletContext();
@@ -30,5 +34,7 @@ public class ApplicationListener implements ServletContextListener {
         System.out.println("所有类型已加载");
         application.setAttribute("regionList", regionService.findAll());
         System.out.println("所有地区已加载");
+        application.setAttribute("roleList", roleService.findAll());
+        System.out.println("所有角色已加载");
     }
 }

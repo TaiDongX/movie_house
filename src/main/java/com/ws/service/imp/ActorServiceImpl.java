@@ -11,6 +11,7 @@ import com.ws.mapper.ActorMapper;
 import com.ws.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public PageInfo<Actor> getActorsByPage(QueryCeleVO vo) {
         PageHelper.startPage(vo.page, vo.size);
+        PageHelper.orderBy("length(actor_id)");
         return new PageInfo<>(actorMapper.getActorsByPage(vo));
     }
 
@@ -58,5 +60,25 @@ public class ActorServiceImpl implements ActorService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public void updateActor(Actor actor) {
+        actorMapper.updateByPrimaryKeySelective(actor);
+    }
+
+    @Override
+    public boolean getActorByName(String name) {
+        ActorExample.Criteria criteria = actorExample.createCriteria();
+        criteria.andNameEqualTo(name);
+        List<Actor> list = actorMapper.selectByExample(actorExample);
+        actorExample.clear();
+        return list != null && list.size() > 1 ;
+    }
+
+    @Transactional
+    @Override
+    public void addActor(Actor actor) {
+        actorMapper.insertSelective(actor);
+    }
 
 }

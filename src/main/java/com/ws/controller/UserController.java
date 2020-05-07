@@ -287,6 +287,7 @@ public class UserController {
         myUser.setEmail(user.getEmail());
         myUser.setKeep(user.getKeep());
         userService.updateUser(myUser);
+        req.getSession().setAttribute("user", myUser);
         return "保存成功";
     }
 

@@ -1,5 +1,6 @@
 package com.ws.mapper;
 
+import com.ws.bean.Movie;
 import com.ws.bean.Type;
 import com.ws.bean.TypeExample;
 import java.util.List;
@@ -29,4 +30,10 @@ public interface TypeMapper {
     int updateByPrimaryKey(Type record);
 
     List<Type> getTypesByMovieId(String movieId);
+
+    void updateMovieTypes(@Param("movie") Movie m);
+
+    void deleteMovieTypes(@Param("movie") Movie m);
+
+    Integer getTypeColls(Integer typeId);
 }

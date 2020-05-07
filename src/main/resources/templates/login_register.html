@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>电影之家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+            }, false);
+    function hideURLbar(){
+        window.scrollTo(0,1);
+    }
+    </script>
+    <!-- Meta tag Keywords -->
+    <!-- Custom-Style-Sheet -->
+    <link href="/static/css/back/login/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/static/css/back/login/style.css" rel="stylesheet" type="text/css" media="all"/><!--style_sheet-->
+    <link rel="stylesheet" href="/static/css/back/login/flexslider.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/css/back/login/font-awesome.css"> <!-- Font-Awesome_Icons-CSS -->
+</head>
+<body>
+
+<div class="w3l-head">
+    <h1>Movie Menagement</h1>
+</div>
+<div class="w3l-main">
+    <div class="w3l-left-side">
+
+        <div class="flexslider">
+            <ul class="slides">
+                <li>
+                    <img src="/static/img/login/lunbo1.jpg" style="max-height: 500px;"/>
+                </li>
+                <li>
+                    <img src="/static/img/login/lunbo2.jpg" style="max-height: 500px;"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="w3l-rigt-side">
+        <form action="#" method="post">
+            <div class="w3l-signin">
+                <a class="w3_play_icon1" href="#small-dialog1">用户登录</a>
+            </div>
+            <div class="clear"></div>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<!--sign in form -->
+<div id="small-dialog1" class="mfp-hide">
+    <div class="wthree-container">
+        <div class="wthree-form">
+            <div class="agileits-2">
+                <h2>用户登录</h2>
+            </div>
+            <form action="/admin/login" method="post">
+                <div class="w3-user">
+                    <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                    <input type="text" name="loginName" placeholder="用户名">
+                </div>
+                <div class="clear"></div>
+                <div class="w3-psw">
+                    <span><i class="fa fa-key" aria-hidden="true"></i></span>
+                    <input type="password" name="pwd" placeholder="密码">
+                </div>
+                <div class="signin">
+                    <input type="submit" value="登录">
+                </div>
+            </form>
+        </div>
+    </div>
+<!--sign in form -->
+</div>
+
+<!-- //for register popup -->
+<footer>Copyright &copy; 2018.Company name All rights reserved</footer>
+
+<script type="text/javascript" src="/static/js/back/login/jquery-2.1.4.min.js"></script>
+
+<!-- pop-up-box-js-file -->
+<script src="/static/js/back/login/jquery.magnific-popup.js" type="text/javascript"></script>
+<!--//pop-up-box-js-file -->
+<script>
+    $(document).ready(function() {
+        if(window.location != top.location){
+            top.location = window.location;
+        }
+        $('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in'
+        });
+
+    });
+</script>
+<!-- flexSlider -->
+<script defer src="/static/js/back/login/jquery.flexslider.js"></script>
+<script type="text/javascript">
+    $(window).load(function(){
+        $('.flexslider').flexslider({
+            animation: "slide",
+            start: function(slider){
+                $('body').removeClass('loading');
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.ws.mapper;
 
+import com.github.pagehelper.PageInfo;
 import com.ws.VO.QueryMoviesVO;
 import com.ws.bean.Movie;
 import com.ws.bean.MovieExample;
@@ -25,6 +26,7 @@ public interface MovieMapper {
 
     Movie selectByPrimaryKey(String movieId);
 
+
     int updateByExampleSelective(@Param("record") Movie record, @Param("example") MovieExample example);
 
     int updateByExample(@Param("record") Movie record, @Param("example") MovieExample example);
@@ -44,4 +46,10 @@ public interface MovieMapper {
     List<Movie> getMovieByActorId(String actorId);
 
     List<Movie> getMovieByUserId(Integer userId);
+
+    List<Movie> getMoviesByPageIgnoreStatus(@Param("vo") QueryMoviesVO vo);
+
+    Movie selectByPrimaryKeyIgnoreStatus(String movieId);
+
+    Integer getMovieCountByType(Integer typeId);
 }

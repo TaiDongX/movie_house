@@ -1,6 +1,7 @@
 package com.ws.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Role implements Serializable {
     private Integer roleId;
@@ -12,6 +13,8 @@ public class Role implements Serializable {
     private String description;
 
     private Integer status;
+
+    private List<Fun> funList;
 
     public Integer getRoleId() {
         return roleId;
@@ -51,5 +54,13 @@ public class Role implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<Fun> getFunList() {
+        return funList;
+    }
+
+    public void setFunList(List<Fun> funList) {
+        this.funList = funList;
     }
 }

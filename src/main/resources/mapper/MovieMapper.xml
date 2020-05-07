@@ -98,6 +98,13 @@
     from movie
     where movie_id = #{movieId,jdbcType=VARCHAR} and status != -1
   </select>
+  <select id="selectByPrimaryKeyIgnoreStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from movie
+    where movie_id = #{movieId,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from movie
     where movie_id = #{movieId,jdbcType=VARCHAR}
@@ -368,7 +375,7 @@
     select * from movie
     <where>
       <if test="vo.name != null and vo.name != ''">
-        and  LOCATE(#{vo.name},`name`) > 0 OR LOCATE(#{vo.name},`alias`) > 0
+        and  (LOCATE(#{vo.name},`name`) > 0 OR LOCATE(#{vo.name},`alias`) > 0)
       </if>
 
       <if test="vo.region != null and vo.region.size > 0">
@@ -399,8 +406,51 @@
     <if test="vo.maxScore != null">
       and rate &lt;= #{vo.maxScore}
     </if>
+    <if test="1==1">
+      and status != -1
+    </if>
     </where>
-    and status != -1
+
+  </select>
+
+  <select id="getMoviesByPageIgnoreStatus" resultMap="BaseResultMap" parameterType="com.ws.VO.QueryMoviesVO">
+    select * from movie
+    <where>
+      <if test="vo.name != null and vo.name != ''">
+        and  LOCATE(#{vo.name},`name`) > 0 OR LOCATE(#{vo.name},`alias`) > 0
+      </if>
+
+      <if test="vo.region != null and vo.region.size > 0">
+        and region_id in
+        <foreach collection="vo.region" item="re" open="(" close=")" separator=",">
+          #{re}
+        </foreach>
+      </if>
+      <if test="vo.type != null and vo.type.size > 0">
+        and movie_id in
+        (
+        select movie_id from movie_type where type_id in
+        <foreach collection="vo.type" item="ty" open="(" close=")" separator=",">
+          #{ty}
+        </foreach>
+        )
+      </if>
+      <if test="vo.earlyDate != null">
+        AND release_date &gt;= #{vo.earlyDate,jdbcType=DATE}
+      </if>
+
+      <if test="vo.latedDate != null">
+        AND release_date &lt;= #{vo.latedDate,jdbcType=DATE}
+      </if>
+      <if test="vo.minScore != null">
+        and rate &gt;= #{vo.minScore}
+      </if>
+      <if test="vo.maxScore != null">
+        and rate &lt;= #{vo.maxScore}
+      </if>
+
+    </where>
+
   </select>
   <select id="getMovieByActorId" resultMap="BaseResultMap" parameterType="java.lang.String">
     select * from movie where movie_id in (
@@ -413,5 +463,8 @@
     select * from movie
     left join user_collect uc on movie.movie_id = uc.movie_id
     where user_id = #{userId} and status != -1
+  </select>
+  <select id="getMovieCountByType" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(movie_id) from movie_type where type_id = #{typeId}
   </select>
 </mapper>

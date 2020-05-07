@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="穷在闹市" />
+    <!-- 作者 -->
+    <meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+    <!-- 定义页面的最新版本 -->
+    <meta name="description" content="网站简介" />
+    <!-- 网站简介 -->
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>更新演员</title>
+
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <style>
+        .layui-form-label{
+            width: 100px;
+        }
+        .layui-input-block{
+            margin-left: 130px;
+        }
+        .layui-form{
+            margin-right: 30%;
+        }
+        .err{
+            color:red;
+        }
+        .ok{
+            color:green;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="cBody">
+    <form action="/view/updateActor"  class="layui-form" method="get" id="actorForm" enctype="multipart/form-data">
+        <input name="actorId" th:value="${actor.actorId}" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">演员名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="actorName" readonly="readonly" th:value="${actor.name}"   required lay-verify="required" autocomplete="off" class="layui-input">
+                <span id="msg"></span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-block">
+                <input type="date" name="birthday" id="actorBir" th:value="${actor.birthday}" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">演员图片</label>
+            <img th:src="'https://dfstest01.oss-cn-beijing.aliyuncs.com/img/actors/'+${actor.imgUrl}+'.jpg'" style="max-height: 100px;" >
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生地</label>
+            <div class="layui-input-block">
+                <input type="text" name="homePlace" th:value="${actor.homePlace}" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">职业</label>
+            <div class="layui-input-block">
+                <input type="text" name="occupation" th:value="${actor.occupation}" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" >
+            <label class="layui-form-label">别名</label>
+            <div class="layui-input-block">
+                <input type="text" name="alias" th:value="${actor.alias}" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="info">演员简介</label>
+            <div class="layui-input-block">
+                <textarea rows="10" cols="110" required="required" autocomplete="off" id="info" name="info" th:utext="${actor.info}"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="info">imdbId</label>
+            <div class="layui-input-block">
+                <input type="text" name="imdbId" th:value="${actor.imdbId}" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="男" title="男" >
+                <input type="radio" name="sex" value="女" title="女" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="submit" onclick="check()"  lay-submit lay-filter="submitBut">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script type="text/javascript" th:inline="javascript">
+        function check(){
+            var formData = $("#actorForm").serialize();
+            //alert(formData);
+            /* var bir=$("#actorBir").val();
+            alert(bir); */
+        }
+        $(document).ready(function(){
+            var sex= [[${actor.sex}]];
+            //alert(sex);
+            $("input[value='"+sex+"']").trigger("click");
+        })
+    </script>
+
+
+</div>
+</body>
+
+</html>

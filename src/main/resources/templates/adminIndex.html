@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 定义页面的最新版本 -->
+    <meta name="description" content="网站简介"/>
+    <!-- 网站简介 -->
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开"/>
+    <title>Movie House</title>
+
+    <!-- 公共样式 开始 -->
+    <link rel="shortcut icon" href="/static/img/images/favicon.ico"/>
+    <link rel="bookmark" href="/static/img/images/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <!--[if lt IE 9]>
+    <script src="/static/js/back/framework/html5shiv.min.js"></script>
+    <script src="/static/js/back/framework/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/frameStyle.css">
+    <script type="text/javascript" src="/static/js/back/framework/frame.js"></script>
+</head>
+<body>
+<!-- 左侧菜单 - 开始 -->
+<div class="frameMenu">
+    <div class="logo">
+        <a href=""><img src="/static/img/images/logo.png"/></a>
+        <div class="logoText">
+            <h1>Movie House</h1>
+            <p>王朔出品</p>
+        </div>
+    </div>
+    <div class="menu">
+        <ul>
+            <li th:each="fun : ${session.loginAdmin.role.funList}">
+                <a class="menuFA" href="javascript:void(0)" th:onclick="changePage([[${fun.url}]])">
+                    <i class="iconfont icon-liuliangyunpingtaitubiao03 left"></i>
+                    [[${fun.funName}]]
+                    <i class="iconfont icon-dajiantouyou right"></i></a>
+                <dl>
+                    <dt th:each="subFun : ${fun.subFuns}">
+                        <a href="javascript:void(0)" onclick="menuCAClick('/static/'+[[${subFun.funUrl}]],this)">
+                            [[${subFun.funName}]]
+                        </a>
+                    </dt>
+
+                </dl>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<!-- 左侧菜单 - 结束 -->
+
+<div class="main">
+    <!-- 头部栏 - 开始 -->
+    <div class="frameTop">
+        <img class="jt" src="/static/img/images/top_jt.png"/>
+        <div class="topMenu">
+            <ul>
+                <li><a href="javascript:void(0)" th:onclick="changePage('/admin/showInfo')"><i
+                        class="iconfont icon-yonghu1"></i>[[${session.loginAdmin.name}]]</a></li>
+                <li><a href="javascript:void(0)" th:onclick="changePage('/admin/toChangePwd')"><i
+                        class="iconfont icon-xiugaimima"></i>修改密码</a></li>
+                <li><a href="/admin/quit" id="zx"><i class="iconfont icon-084tuichu"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 头部栏 - 结束 -->
+    <!-- 核心区域 - 开始 -->
+    <div class="frameMain">
+        <div class="title" id="frameMainTitle">
+            <span><i class="iconfont icon-xianshiqi"></i>后台首页</span>
+        </div>
+        <div class="con">
+            <iframe id="mainIframe" scrolling="no" src="/movie/showMovies"></iframe>
+        </div>
+    </div>
+    <!-- 核心区域 - 结束 -->
+</div>
+
+</body>
+<script type="text/javascript">
+
+    function changePage(url){
+        $("#mainIframe").attr("src",url);
+    }
+</script>
+</html>

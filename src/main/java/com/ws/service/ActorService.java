@@ -22,4 +22,11 @@ public interface ActorService {
     PageInfo<Actor> getActorsByPage(QueryCeleVO vo);
 
     Actor getActorsById(String id);
+
+    void updateActor(Actor actor);
+
+    boolean getActorByName(String name);
+
+    void addActor(Actor actor);
+
 }

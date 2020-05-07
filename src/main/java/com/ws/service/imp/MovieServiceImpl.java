@@ -179,7 +179,6 @@ public class MovieServiceImpl implements MovieService {
 
         PageHelper.startPage(vo.page, vo.size);
         PageHelper.orderBy(vo.orderBy);
-
         return new PageInfo<>(movieMapper.getMoviesByPage(vo));
     }
 
@@ -243,6 +242,42 @@ public class MovieServiceImpl implements MovieService {
         criteria.andMovieIdEqualTo(movieId);
         movieMapper.updateByExample(movie, movieExample);
         movieExample.clear();
+    }
+
+    @Override
+    public PageInfo<Movie> getMoviesByPageIgnoreStatus(QueryMoviesVO vo) {
+        PageHelper.startPage(vo.page, vo.size);
+        PageHelper.orderBy(vo.orderBy);
+        return new PageInfo<>(movieMapper.getMoviesByPageIgnoreStatus(vo));
+    }
+
+    @Override
+    public void changeMovieStatus(String movieId, Integer status) {
+        Movie movie = movieMapper.selectByPrimaryKeyIgnoreStatus(movieId);
+        movie.setStatus(movie.getStatus() == -1 ? 0 : -1);
+        MovieExample.Criteria criteria = movieExample.createCriteria();
+        criteria.andMovieIdEqualTo(movieId);
+        movieMapper.updateByExample(movie, movieExample);
+        movieExample.clear();
+
+    }
+
+    @Override
+    public void updateMovie(Movie m) {
+        movieMapper.updateByPrimaryKeySelective(m);
+        try {
+            typeMapper.deleteMovieTypes(m);
+            typeMapper.updateMovieTypes(m);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public List<Integer> getMovieCountByType(List<Type> list) {
+        return list.stream().map(t -> movieMapper.getMovieCountByType(t.getTypeId())).collect(Collectors.toList());
     }
 
 

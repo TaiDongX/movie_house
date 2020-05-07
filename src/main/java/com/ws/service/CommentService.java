@@ -2,6 +2,7 @@ package com.ws.service;
 
 import com.github.pagehelper.PageInfo;
 import com.ws.bean.Comment;
+import com.ws.bean.Type;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface CommentService {
     void addComment(Comment comment) throws Exception;
 
     PageInfo<Comment> getCommentsByUserId(Integer userId, Integer page, Integer size, String orderBy);
+
+    List<Integer> getCountByType(List<Type> list);
 }

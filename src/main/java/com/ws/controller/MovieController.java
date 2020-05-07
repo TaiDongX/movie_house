@@ -1,18 +1,12 @@
 package com.ws.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ws.VO.IndexInfoVO;
 import com.ws.VO.QueryMoviesVO;
-import com.ws.bean.Actor;
+import com.ws.bean.Admin;
+import com.ws.bean.Log;
 import com.ws.bean.Movie;
-import com.ws.mapper.MovieMapper;
-import com.ws.service.ActorService;
-import com.ws.service.DirWService;
-import com.ws.service.MovieService;
-import com.ws.service.UserService;
-import jdk.nashorn.internal.ir.LiteralNode;
+import com.ws.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -22,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.constraints.NotNull;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author 王朔
@@ -49,7 +42,13 @@ public class MovieController {
     private DirWService dirWService;
 
     @Autowired
+    private LogService logService;
+
+    @Autowired
     private RedisTemplate redisTemplate;
+
+
+
 
 
     /**
@@ -153,6 +152,10 @@ public class MovieController {
         return list;
     }
 
+    /**
+     * 跳转到电影网格页面
+     * @return
+     */
     @RequestMapping("toMovieGrid")
     public ModelAndView toMovieGrid(){
         ModelAndView m = new ModelAndView();
@@ -192,6 +195,12 @@ public class MovieController {
         return  userService.getMovieCollect(movieId,userId) > 0;
     }
 
+    /**
+     * 提供用户收藏功能
+     * @param movieId
+     * @param userId
+     * @return
+     */
     @RequestMapping("addCollect")
     public String addCollect(String movieId,String userId){
         if(userService.getMovieCollect(movieId,userId) > 0){
@@ -204,7 +213,78 @@ public class MovieController {
             movieService.updateCollectCount(movieId,1);
             return "收藏成功";
         }
-
     }
 
+    /**
+     * 转到电影管理页面
+     * @return
+     */
+    @RequestMapping("showMovies")
+    public ModelAndView showMovies(){
+        ModelAndView m = new ModelAndView();
+        m.setViewName("showMovie");
+        return m;
+    }
+
+    /**
+     * 获取后台电影列表
+     * @param vo
+     * @return
+     */
+    @RequestMapping("getBackMovieList")
+    public PageInfo<Movie> getBackMovieList(@RequestBody QueryMoviesVO vo){
+        System.out.println("vo = " + vo);
+        return movieService.getMoviesByPageIgnoreStatus(vo);
+    }
+
+    /**
+     * 修改电影状态
+     * @param movieId
+     * @param status
+     * @param req
+     */
+    @RequestMapping("changeMovieStatus")
+    public void changeMovieStatus(String movieId, Integer status, HttpServletRequest req){
+        // 修改状态
+        movieService.changeMovieStatus(movieId,status);
+        Admin admin = (Admin) req.getSession().getAttribute("loginAdmin");
+        // 保存日志
+        Log log = new Log();
+        log.setCreatTime(new Date());
+        log.setOpAdmin(admin.getAdminId());
+        log.setOpType(3);
+        String content = status == -1 ? "上架": "下架";
+        log.setOpContent(content+"了电影"+movieId);
+        logService.saveLogger(log);
+    }
+
+    /**
+     * 查询电影信息以供修改
+     * @param movieId
+     * @return
+     */
+    @RequestMapping("findMovieForUpdate")
+    public ModelAndView findMovieForUpdate(String movieId){
+        ModelAndView m = new ModelAndView();
+        Movie movie = movieService.getMovieById(movieId);
+        movie.setActorList(actorService.getActorsByMovieId(movieId));
+        m.addObject("movie",movie);
+        m.addObject("mo", movie.getTypeList());
+        m.setViewName("movie_update");
+        return m;
+    }
+
+    @RequestMapping("updateMovie")
+    public String updateMovie(@RequestBody Movie m,HttpServletRequest req){
+        Admin admin = (Admin) req.getSession().getAttribute("loginAdmin");
+        movieService.updateMovie(m);
+        Log log = new Log();
+        log.setCreatTime(new Date());
+        log.setOpAdmin(admin.getAdminId());
+        log.setOpType(3);
+        log.setOpContent("修改了电影"+m.getMovieId()+"的信息");
+        logService.saveLogger(log);
+
+        return "修改成功";
+    }
 }

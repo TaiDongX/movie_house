@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 定义页面的最新版本 -->
+    <meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+    <title>UpdateMovie</title>
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/iconfont.css">
+    <script type="text/javascript" src="/static/js/back/framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/back/css/jquery.mCustomScrollbar.css">
+    <script src="/static/js/back/framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/back/framework/jquery.mCustomScrollbar.min.js"></script>
+    <script src="/static/js/back/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <style>
+        .layui-form-label{
+            width: 100px;
+        }
+        .layui-input-block{
+            margin-left: 130px;
+        }
+        .layui-form{
+            margin-right: 30%;
+        }
+        #actorLength{
+            display:none;
+        }
+        #queren{
+            display:none;
+        }
+        #act{
+            display:none;
+        }
+        .layui-input-block2{
+            margin-left: 30px;
+            float: left;
+        }
+    </style>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        function submitMsg() {
+            var movie = {
+                "movieId":[[${movie.movieId}]],
+                "name": $("#movieName").val(),
+                "alias" : $("#alias").val(),
+                "imdbId" : $("#imdbId").val(),
+                "info" :$("#movieInfo").val(),
+                "rate" :$("#rate").val(),
+                "releaseDate" :$("showDate").val(),
+                "regionId" : $("#provid").val(),
+                typeList: []
+            };
+
+            var types=[[${application.typeList}]];
+            $('input[name="type"]:checked').each(function(){
+                for (var key = 0;key < types.length; key++) {
+                    if($(this).val() == types[key].typeId ){
+                        movie.typeList.push(types[key])
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/movie/updateMovie",
+                data: JSON.stringify(movie),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (msg) {
+                    alert(msg);
+                    location.href="/admin/toMovieManager"
+                },
+                error : function (e) {
+                    location.href="/admin/toMovieManager"
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+<div class="cBody">
+    <form action="/static/back/cjf/admin/updateMovie_do?movieId=${movie.movieId}" id="update" class="layui-form" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">电影图片</label>
+            <img th:src="'https://dfstest01.oss-cn-beijing.aliyuncs.com/img/movies/'+${movie.movieId}+'.jpg'" style="max-height: 100px;">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电影名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="movieName" id="movieName" class="layui-input" th:value="${movie.name}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电影评分</label>
+            <div class="layui-input-block">
+                <input type="text" name="rate" id="rate" class="layui-input" th:value="${movie.rate}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">别名</label>
+            <div class="layui-input-block">
+                <input type="text" name="alias" id="alias" class="layui-input" th:value="${movie.alias}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">imdbId</label>
+            <div class="layui-input-block">
+                <input type="text" name="imdbId" id="imdbId" class="layui-input" th:value="${movie.imdbId}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上映时间</label>
+            <div class="layui-input-block">
+                <input type="date" name="showDate" id="showDate" class="layui-input" th:value="${#dates.format(movie.releaseDate, 'yyyy-MM-dd')}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电影简介</label>
+            <div class="layui-input-block">
+                <textarea rows="10" cols="112" name="movieInfo" id="movieInfo" th:text="${movie.movieInfo}"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">演员</label>
+            <div class="layui-input-block">
+                <input th:each="actor : ${movie.actorList}" type="text" style="margin-top:15px;" class="layui-input" name="oldactor" disabled="disabled" th:value="${actor.name}">
+                <!--<button class="layui-btn" type="button" onclick="Actnum()" style="margin-top:15px;">添加演员</button><br>-->
+                <input type="text" id="actorLength" name="actorLength"  placeholder="添加演员个数" class="layui-input" style="margin-top:10px;width:120px"><br>
+                <button class="layui-btn" type="button"  onclick="Qnum()" style="margin-top:15px;"id="queren">确认</button>
+            </div>
+        </div>
+        <div class="layui-form-item" id="act">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div id="actor1">
+
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function(){
+                var types=[[${mo}]];
+                for(var i = 0; i < types.length; i++){
+                    var id=types[i].typeId;
+                    $("input[value='"+id+"']").trigger("click");
+                }
+            });
+        </script>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-block">
+
+                <div class="layui-input-block layui-input-block2" th:id="'movietype'+${t.typeId}"  th:each="t,tStat : ${application.typeList}">
+                    <input type="checkbox" name="type" th:value="${t.typeId}" th:attr="title=${t.typeName}" >
+                </div>
+
+            </div>
+        </div>
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function(){
+                $("#provid").val([[${movie.regionId}]]);
+            })
+        </script>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地区</label>
+            <div class="layui-input-inline">
+                <div id="reg1">
+                    <select name="regions" id="provid">
+                        <option value="-1">请选择地区</option>
+                        <option th:each=" re : ${application.regionList}" th:value="${re.regionId}" th:text="${re.regionName}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="button" onclick="submitMsg()">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        $(function(){
+            $("button[type=submit]").click(function(){
+                var form = $("#update").serialize();
+                //alert(form);
+            })
+        });
+        function Qnum(){
+            var num = $("#actorLength").val();
+            var num1 = parseInt(num);
+            for (var i=1;i<=num1;i++) {
+                $("#actor1").append('<input type="text" name="movieActor['+i+']" style="margin-top:15px;" autocomplete="off" class="layui-input"  placeholder="演员'+i+'"><span id="msg"></span>')
+            }
+        }
+        function Actnum(){
+            $("#actorLength").show();
+            $("#queren").show();
+            $("#act").show();
+        }
+    </script>
+
+    <script>
+        layui.use(['upload','form'], function() {
+            var form = layui.form;
+            var upload = layui.upload;
+            var layer = layui.layer;
+            //监听提交
+            form.on('submit(submitBut)', function(data) {
+                return false;
+            });
+            form.verify({
+                //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+                ZHCheck: [
+                    /^[\u0391-\uFFE5]+$/
+                    ,'只允许输入中文'
+                ]
+            });
+        });
+    </script>
+
+</div>
+</body>
+
+</html>

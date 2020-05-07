@@ -176,6 +176,9 @@
 				url: "/movie/getMovieRelated",
 				data: "movieId=" + movieId,
 				dataType: "JSON",
+				complete: function () {
+					$("#pload").remove();
+				},
 				success: function (list) {
 					var s = '';
 					for(var i = 0;i<list.length;i++){
@@ -184,9 +187,10 @@
 						'<img src="https://dfstest01.oss-cn-beijing.aliyuncs.com/img/movies/'+movie.movieId+'.jpg" alt="" width="180px" height="200px"> '+
 						'<div class="mv-item-infor">'+
 						'<h6><a href="/movie/getMovieById?movieId='+movie.movieId+'">'+movie.name+'</a></h6>'+
-						'<p class="rate"><i class="ion-android-star"></i><span>'+movie.rate+'</span> /10</p>'+
-						'<p  id="relatedMovieInfo">'+movie.movieInfo+'</p><br/>';
-
+						'<p class="rate"><i class="ion-android-star"></i><span>'+movie.rate+'</span> /10</p>';
+						if(movie.movieInfo != null){
+							s+='<p  id="relatedMovieInfo">'+movie.movieInfo+'</p><br/>';
+						}
 						if(movie.alias !== null){
 							s+='<p class="run-time">别名: '+movie.alias+'</p>';
 						}
@@ -288,10 +292,7 @@
 
 		<form method="post" action="" id="loginForm">
 			<div class="row">
-				<span
-
-				>
-		</span>
+				<span></span>
 				<label for="username"> 用户名:
 					<input type="text"
 						   name="username" id="username" placeholder="请输入用户名"/>
@@ -385,7 +386,7 @@
 						<span></span>
 					</div>
 				</div>
-				<a href="index.html"><img class="logo" src="/static/img/front/logo1.png" alt="" width="119" height="58"></a>
+				<a href="/movie/getIndexMovies"><img class="logo" src="/static/img/front/logo1.png" alt="" width="119" height="58"></a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse flex-parent" id="bs-example-navbar-collapse-1">
@@ -465,8 +466,8 @@
 							<div><a href="https://www.youtube.com/watch?v=lRLJkDEfFP8" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
 						</div>
 						<div class="btn-transform transform-vertical">
-							<div><a href="#" class="item item-1 yellowbtn"> <i class="ion-card"></i> 购票 </a></div>
-							<div><a href="#" class="item item-2 yellowbtn"><i class="ion-card"></i></a></div>
+							<div><a href="#" class="item item-1 yellowbtn"> <i class="ion-card"></i> 立即观看 </a></div>
+							<div><a href="https://dfstest01.oss-cn-beijing.aliyuncs.com/video/movies/26363254.mp4" class="item item-2 yellowbtn"><i class="ion-card"></i></a></div>
 						</div>
 					</div>
 				</div>
@@ -490,7 +491,7 @@
 							<p>  电影评分 </p>
 							<i class="ion-ios-star" th:if="${movie.rate != 0}" th:each="m : ${#numbers.sequence(1,movie.rate)}"></i>
 
-							<i class="ion-ios-star-outline" th:each="m : ${#numbers.sequence(movie.rate,9)}"></i>
+							<i class="ion-ios-star-outline"  th:if="${movie.rate < 10}" th:each="m : ${#numbers.sequence(movie.rate,9) }"></i>
 						</div>
 					</div>
 					<div class="movie-tabs">
@@ -561,7 +562,7 @@
 						            	<div class="rv-hd">
 						            		<div class="div">
 							            		<h3>相关的电影：</h3>
-						       	 				<h2 th:text="${movie.name}"></h2>
+						       	 				<h2 th:utext="${movie.name}"></h2>
 							            	</div>
 							            	<a href="javaScript:void(0)" id="writeComm" class="redbtn">发表评论</a>
 						            	</div>
@@ -616,8 +617,8 @@
 						        </div>
 					       	 	<div id="moviesrelated" class="tab">
 					       	 		<div class="row">
-					       	 			<h3>与<span th:text="${movie.name}"></span>相关的电影：</h3>
-
+					       	 			<h3>与<span th:utext="${movie.name}"></span>相关的电影：</h3>
+										<img id="pload" style="position: relative;top:20px;left: 100px;" src="/static/img/front/ajax.gif" width="200px" height="200px">
 										<div id="relatedMovies">
 										</div>
 					       	 		</div>
@@ -635,7 +636,7 @@
 	<div class="container">
 		<div class="flex-parent-ft">
 			<div class="flex-child-ft item1">
-				<a href="index.html"><img class="logo" src="/static/img/front/logo1.png" alt=""></a>
+				<a href="/movie/getIndexMovies"><img class="logo" src="/static/img/front/logo1.png" alt=""></a>
 				<p>翻斗大街翻斗花园<br>
 					二号楼1001</p>
 				<p>致电我们: <a href="#">(+01) 123456789</a></p>
