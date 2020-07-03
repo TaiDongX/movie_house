@@ -56,8 +56,8 @@ logging:
 aliyun:
   oss:
     endpoint: oss-cn-beijing.aliyuncs.com
-    keyid: LTAI4FusZe3wH1ChUWpwVYKB
-    keysecret: 6qr4uA8oFjGDT2gFePWFOBraUCypa3
+    keyid: 
+    keysecret: 
     bucketname: java4all-file
     filehost: img
 
