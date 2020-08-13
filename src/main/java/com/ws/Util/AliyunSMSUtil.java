@@ -28,8 +28,8 @@ public class AliyunSMSUtil {
     /**
      * TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找，上方申请的)
      */
-    static final String ACCESS_KEY_ID = "LTAI4FusZe3wH1ChUWpwVYKB";
-    static final String ACCESS_KEY_SECRET = "6qr4uA8oFjGDT2gFePWFOBraUCypa3";
+    static final String ACCESS_KEY_ID = "";
+    static final String ACCESS_KEY_SECRET = "";
 
     public static void sendSms(String phoneNum, String code) throws ClientException, com.aliyuncs.exceptions.ClientException {
         DefaultProfile profile = DefaultProfile.getProfile("beijing", ACCESS_KEY_ID, ACCESS_KEY_SECRET);
